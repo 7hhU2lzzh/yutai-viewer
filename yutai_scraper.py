@@ -318,9 +318,14 @@ def main():
     with open("kokuzetsu_data.json", "w", encoding="utf-8") as f:
         json.dump(kokuzetsu, f, ensure_ascii=False)
 
-    # --- .htaccess ---
-    htaccess = """# JSONファイルへの直接アクセスを禁止
-<Files "*.json">
+htaccess = """# 機密JSONは直接アクセス禁止
+<Files "users.json">
+    Deny from all
+</Files>
+<Files "prev.json">
+    Deny from all
+</Files>
+<Files "kokuzetsu.json">
     Deny from all
 </Files>
 """
