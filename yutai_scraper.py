@@ -246,10 +246,16 @@ document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => 
         const rows  = Array.from(tbody.querySelectorAll('tr'));
 
         rows.sort((a, b) => {{
-            const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
-            const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
-            return state.asc ? aVal - bVal : bVal - aVal;
-        }});
+    // 非表示行は後ろに追いやる
+    const aVisible = a.style.display !== 'none';
+    const bVisible = b.style.display !== 'none';
+    if (aVisible && !bVisible) return -1;
+    if (!aVisible && bVisible) return 1;
+    
+    const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
+    const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
+    return state.asc ? aVal - bVal : bVal - aVal;
+}});
 
         table.querySelectorAll('thead th').forEach(t => {{
             t.textContent = t.dataset.label;
