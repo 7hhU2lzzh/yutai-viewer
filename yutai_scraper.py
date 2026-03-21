@@ -2,7 +2,6 @@ import requests
 import time
 import os
 import ftplib
-import crypt
 import json
 from io import BytesIO
 from datetime import datetime, timezone, timedelta
@@ -14,8 +13,6 @@ FTP_HOST   = os.getenv("FTP_HOST")
 FTP_USER   = os.getenv("FTP_USER")
 FTP_PASS   = os.getenv("FTP_PASS")
 FTP_DIR    = "www"
-BASIC_USER = os.getenv("BASIC_USER")
-BASIC_PASS = os.getenv("BASIC_PASS")
 
 API_URL = "https://gokigen-life.tokyo/api/00ForWeb/ForZaiko2.php"
 
@@ -162,6 +159,38 @@ td{padding:10px 12px;border-bottom:1px solid #f0ede6;font-size:13px}
 <div class="header"><h1>⚙️ ユーザー管理</h1>
 <div><a href="index.php" class="btn-sm">ビューワーへ</a><a href="logout.php" class="btn-sm">ログアウト</a></div></div>
 <div class="body">
+<div class="card" style="background:#fafaf8;border:1px solid #e8e6e0;border-radius:8px;padding:20px;margin-bottom:24px">
+<h2 style="font-size:13px;font-weight:600;color:#555;margin-bottom:14px">🔗 管理リンク集</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px">
+<tr style="border-bottom:1px solid #f0ede6">
+  <td style="padding:8px 12px;color:#888;white-space:nowrap;width:140px">GitHub</td>
+  <td style="padding:8px 12px"><a href="https://github.com/7hhU2lzzh/yutai-viewer" target="_blank" style="color:#333">https://github.com/7hhU2lzzh/yutai-viewer</a></td>
+</tr>
+<tr style="border-bottom:1px solid #f0ede6">
+  <td style="padding:8px 12px;color:#888">GAS: taisyaku監視</td>
+  <td style="padding:8px 12px"><a href="https://script.google.com/home/projects/1INi7jnp4vD3pbu89oJ7Avr9WuV8EM0RMVCkgfk_ibo_XtIJb81tTfO6q/edit" target="_blank" style="color:#333">開く</a><span style="color:#aaa;font-size:12px;margin-left:8px">machspeeddesigners@gmail.com</span></td>
+</tr>
+<tr style="border-bottom:1px solid #f0ede6">
+  <td style="padding:8px 12px;color:#888">GAS: 適時開示新着</td>
+  <td style="padding:8px 12px"><a href="https://script.google.com/home/projects/1cG-mi_kKjt47rY7YTZQkoLKPXqesUVZFjopGPWJhR8QhHSQX-S8-aLuz/edit" target="_blank" style="color:#333">開く</a><span style="color:#aaa;font-size:12px;margin-left:8px">machspeeddesigners@gmail.com</span></td>
+</tr>
+<tr style="border-bottom:1px solid #f0ede6">
+  <td style="padding:8px 12px;color:#888">Claude Console</td>
+  <td style="padding:8px 12px"><a href="https://console.anthropic.com" target="_blank" style="color:#333">https://console.anthropic.com</a><span style="color:#aaa;font-size:12px;margin-left:8px">ttkzo.ngta@gmail.com</span></td>
+</tr>
+</table>
+</div>
+<div class="card" style="background:#fafaf8;border:1px solid #e8e6e0;border-radius:8px;padding:20px;margin-bottom:24px">
+<h2 style="font-size:13px;font-weight:600;color:#555;margin-bottom:14px">📝 作業メモ（重要）</h2>
+<ul style="font-size:13px;color:#555;line-height:2;padding-left:20px">
+  <li><code>index.php</code> は手動FTPアップ（スクレイパーは触らない）</li>
+  <li><code>hashi_data.json</code> はスクレイパーが絶対に上書きしない設計</li>
+  <li>端の編集権限は管理者のみ（一般ユーザーは表示のみ）</li>
+  <li>初期パスワードは <code>password</code> → ログイン後すぐ変更推奨</li>
+  <li>GitHub Actionsが <code>hashi_api.php</code> を自動FTP転送する</li>
+  <li><code>users.json</code> / <code>hashi_data.json</code> はサーバー上で保護（.htaccess）</li>
+</ul>
+</div>
 <?php if($message): ?><div class="msg"><?=htmlspecialchars($message)?></div><?php endif; ?>
 <div class="card"><h2>＋ ユーザー追加</h2>
 <form method="POST"><input type="hidden" name="action" value="add">
@@ -199,6 +228,37 @@ td{padding:10px 12px;border-bottom:1px solid #f0ede6;font-size:13px}
 </tr><?php endforeach; ?>
 </tbody></table></div></div></body></html>
 '''
+
+# hashi_api.php: 端データをサーバー保存するAPI（hashi_data.jsonは上書きしない）
+HASHI_API_PHP = '''<?php
+session_start();
+if (!isset($_SESSION['user'])) { http_response_code(401); exit; }
+
+$file = __DIR__ . '/hashi_data.json';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit; }
+
+$body = json_decode(file_get_contents('php://input'), true);
+$key  = preg_replace('/[^a-zA-Z0-9_\\-]/', '', $body['key'] ?? '');
+$val  = $body['value'] ?? '';
+
+$allowed = ['', '端のみ', '端+空', '本+端+本', '本+端+空+本', '不明(調査中)'];
+if (!$key || !in_array($val, $allowed, true)) { http_response_code(400); exit; }
+
+$data = [];
+if (file_exists($file)) {
+    $data = json_decode(file_get_contents($file), true) ?? [];
+}
+if ($val === '') {
+    unset($data[$key]);
+} else {
+    $data[$key] = $val;
+}
+file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+header('Content-Type: application/json');
+echo json_encode(['ok' => true]);
+'''
+
 
 def main():
     now          = datetime.now(JST)
@@ -318,7 +378,8 @@ def main():
     with open("kokuzetsu_data.json", "w", encoding="utf-8") as f:
         json.dump(kokuzetsu, f, ensure_ascii=False)
 
-    htaccess = """# 機密JSONは直接アクセス禁止
+    # .htaccess: 機密ファイルへの直接アクセスを禁止
+    htaccess = """# 機密ファイルへの直接アクセス禁止
 <Files "users.json">
     Deny from all
 </Files>
@@ -326,6 +387,9 @@ def main():
     Deny from all
 </Files>
 <Files "kokuzetsu.json">
+    Deny from all
+</Files>
+<Files "hashi_data.json">
     Deny from all
 </Files>
 """
@@ -337,30 +401,39 @@ def main():
             ftp.cwd(FTP_DIR)
 
             # PHPファイル
-            ftp.storbinary("STOR login.php",  BytesIO(LOGIN_PHP.encode('utf-8')))
-            ftp.storbinary("STOR logout.php", BytesIO(LOGOUT_PHP.encode('utf-8')))
-            ftp.storbinary("STOR admin.php",  BytesIO(ADMIN_PHP.encode('utf-8')))
+            ftp.storbinary("STOR login.php",     BytesIO(LOGIN_PHP.encode('utf-8')))
+            ftp.storbinary("STOR logout.php",    BytesIO(LOGOUT_PHP.encode('utf-8')))
+            ftp.storbinary("STOR admin.php",     BytesIO(ADMIN_PHP.encode('utf-8')))
+            ftp.storbinary("STOR hashi_api.php", BytesIO(HASHI_API_PHP.encode('utf-8')))
 
             # データJSON
-            ftp.storbinary("STOR stock_data.json",    BytesIO(json.dumps(stock_data, ensure_ascii=False).encode('utf-8')))
-            ftp.storbinary("STOR kokuzetsu_data.json", BytesIO(json.dumps(kokuzetsu, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR stock_data.json",     BytesIO(json.dumps(stock_data, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR kokuzetsu_data.json",  BytesIO(json.dumps(kokuzetsu, ensure_ascii=False).encode('utf-8')))
 
-            # users.jsonはサーバー上に既にある場合は上書きしない
+            # users.json は既存なら上書きしない
             try:
                 ftp.size("users.json")
                 print("  users.json は既存のためスキップ")
-            except:
+            except Exception:
                 with open("users.json", "rb") as f:
                     ftp.storbinary("STOR users.json", f)
                 print("  users.json を初期作成")
 
+            # hashi_data.json は既存なら上書きしない（端データを守る）
+            try:
+                ftp.size("hashi_data.json")
+                print("  hashi_data.json は既存のためスキップ")
+            except Exception:
+                ftp.storbinary("STOR hashi_data.json", BytesIO(b'{}'))
+                print("  hashi_data.json を初期作成")
+
             # .htaccess
             ftp.storbinary("STOR .htaccess", BytesIO(htaccess.encode('utf-8')))
 
-            # index.phpはGitHubから別途アップ（手動で1回だけ）
             print("✅ 完了！")
     except Exception as e:
         print(f"❌ FTPエラー: {e}")
+
 
 if __name__ == "__main__":
     main()
