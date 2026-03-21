@@ -261,10 +261,12 @@ applyFilters();
 let sortState = {{}};
 document.querySelectorAll('.data-table thead th').forEach((th, colIndex) => {{
     th.addEventListener('click', () => {{
-        const table   = th.closest('table');
-        const tableId = table.closest('.month-panel').id;
+        const table = th.closest('table');
+        const panel = table.closest('.month-panel');
+        if (panel.style.display === 'none') return;
+        const tableId = panel.id;
         if (!sortState[tableId]) sortState[tableId] = {{ col: -1, asc: true }};
-        const state   = sortState[tableId];
+        const state = sortState[tableId];
 
         state.asc = (state.col === colIndex) ? !state.asc : false;
         state.col = colIndex;
