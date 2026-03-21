@@ -33,8 +33,8 @@ REFERER_MAP = {
 
 def fmt_vol(v):
     if not v or str(v) in ["0", "-", "None", ""]:
-        return '<span class="zero-val">-</span>'
-    return f'<span class="stock-val">{v}</span>'
+        return '<td class="text-center" data-value="0"><span class="zero-val">-</span></td>'
+    return f'<td class="text-center" data-value="{v}"><span class="stock-val">{v}</span></td>'
 
 def gyaku_class(days):
     try:
@@ -97,7 +97,6 @@ def main():
     current_month = datetime.now().month
     update_time   = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    # 月ごとの行HTML生成
     rows_by_month = {m: "" for m in range(1, 13)}
     for r in all_data:
         m         = r["target_month"]
@@ -116,22 +115,21 @@ def main():
 
         rows_by_month[m] += f"""
             <tr class="{gc} {stock_flag}">
-                <td><span class="badge border text-dark">{r.get('code','')}</span></td>
-                <td>
+                <td data-value="0"><span class="badge border text-dark">{r.get('code','')}</span></td>
+                <td data-value="0">
                     <strong>{r.get('name','')}</strong><br>
                     <small class="text-muted">{r.get('yutai','')}</small><br>
                     <small>権利日: {kenri} {countdown}</small>
                 </td>
-                <td class="text-center small">逆日歩<br><strong>{r.get('gyaku_days','0')}日</strong></td>
-                <td class="text-center">{fmt_vol(r.get('nvol'))}</td>
-                <td class="text-center">{fmt_vol(r.get('kvol'))}</td>
-                <td class="text-center">{fmt_vol(r.get('rvol'))}</td>
-                <td class="text-center">{fmt_vol(r.get('svol'))}</td>
-                <td class="text-center">{fmt_vol(r.get('gvol'))}</td>
-                <td class="text-center">{fmt_vol(r.get('mvol'))}</td>
+                <td class="text-center small" data-value="{r.get('gyaku_days','0')}">逆日歩<br><strong>{r.get('gyaku_days','0')}日</strong></td>
+                {fmt_vol(r.get('nvol'))}
+                {fmt_vol(r.get('kvol'))}
+                {fmt_vol(r.get('rvol'))}
+                {fmt_vol(r.get('svol'))}
+                {fmt_vol(r.get('gvol'))}
+                {fmt_vol(r.get('mvol'))}
             </tr>"""
 
-    # タブと中身のHTML
     tabs_html   = ""
     panels_html = ""
     for m in range(1, 13):
@@ -144,15 +142,15 @@ def main():
                 <table class="table table-hover align-middle mb-0 sortable-table">
                     <thead class="table-light">
                         <tr>
-                            <th>コード</th>
-                            <th>銘柄名・優待</th>
-                            <th class="text-center">逆日歩</th>
-                            <th class="text-center">日興</th>
-                            <th class="text-center">カブコム</th>
-                            <th class="text-center">楽天</th>
-                            <th class="text-center">SBI</th>
-                            <th class="text-center">GMO</th>
-                            <th class="text-center">松井</th>
+                            <th data-label="コード">コード</th>
+                            <th data-label="銘柄名・優待">銘柄名・優待</th>
+                            <th class="text-center" data-label="逆日歩">逆日歩</th>
+                            <th class="text-center" data-label="日興">日興</th>
+                            <th class="text-center" data-label="カブコム">カブコム</th>
+                            <th class="text-center" data-label="楽天">楽天</th>
+                            <th class="text-center" data-label="SBI">SBI</th>
+                            <th class="text-center" data-label="GMO">GMO</th>
+                            <th class="text-center" data-label="松井">松井</th>
                         </tr>
                     </thead>
                     <tbody>{rows_by_month[m]}</tbody>
@@ -181,13 +179,11 @@ def main():
 <body>
 <div class="container mt-3" style="max-width:1300px">
     <div class="card shadow-sm">
-        <!-- ヘッダー -->
         <div class="p-3 text-white" style="background:linear-gradient(135deg,#0062E6,#33AEFF);border-radius:8px 8px 0 0">
             <h1 class="h5 mb-0">🎁 優待在庫ビューワー
                 <span class="badge bg-light text-primary float-end">更新: {update_time}</span>
             </h1>
         </div>
-        <!-- 検索 + 在庫フィルター -->
         <div class="p-3 bg-white border-bottom d-flex gap-3 align-items-center">
             <input type="text" id="search" class="form-control" placeholder="銘柄名・コードで検索...">
             <div class="form-check form-switch mb-0 text-nowrap">
@@ -195,13 +191,11 @@ def main():
                 <label class="form-check-label" for="stockOnly">在庫ありのみ</label>
             </div>
         </div>
-        <!-- 月タブ -->
         <div class="px-3 pt-2 bg-white border-bottom">
             <ul class="nav nav-pills gap-1 flex-wrap" id="monthTabs">
                 {tabs_html}
             </ul>
         </div>
-        <!-- テーブルパネル -->
         <div class="bg-white">
             {panels_html}
         </div>
@@ -209,7 +203,6 @@ def main():
 </div>
 
 <script>
-// 月タブ切り替え
 document.querySelectorAll('#monthTabs a').forEach(tab => {{
     tab.addEventListener('click', function(e) {{
         e.preventDefault();
@@ -221,7 +214,6 @@ document.querySelectorAll('#monthTabs a').forEach(tab => {{
     }});
 }});
 
-// フィルター適用（検索 + 在庫あり）
 function applyFilters() {{
     const q         = document.getElementById('search').value.toLowerCase();
     const stockOnly = document.getElementById('stockOnly').checked;
@@ -239,7 +231,6 @@ document.getElementById('search').addEventListener('input', applyFilters);
 document.getElementById('stockOnly').addEventListener('change', applyFilters);
 applyFilters();
 
-// ソート
 let sortState = {{}};
 document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => {{
     th.addEventListener('click', () => {{
@@ -253,16 +244,18 @@ document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => 
 
         const tbody = table.querySelector('tbody');
         const rows  = Array.from(tbody.querySelectorAll('tr'));
+
         rows.sort((a, b) => {{
-            const aVal = parseInt(a.cells[colIndex]?.textContent.replace(/[^0-9]/g, '') || '0') || 0;
-            const bVal = parseInt(b.cells[colIndex]?.textContent.replace(/[^0-9]/g, '') || '0') || 0;
+            const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
+            const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
             return state.asc ? aVal - bVal : bVal - aVal;
         }});
 
         table.querySelectorAll('thead th').forEach(t => {{
-            t.textContent = t.textContent.replace(/[ ▲▼]/g, '').trim();
+            t.textContent = t.dataset.label;
         }});
-        th.textContent += state.asc ? ' ▲' : ' ▼';
+        th.textContent = th.dataset.label + (state.asc ? ' ▲' : ' ▼');
+
         rows.forEach(r => tbody.appendChild(r));
     }});
 }});
@@ -270,7 +263,6 @@ document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => 
 </body>
 </html>"""
 
-    # Basic認証ファイル生成
     hashed   = crypt.crypt(BASIC_PASS, crypt.mksalt(crypt.METHOD_SHA512))
     htpasswd = f"{BASIC_USER}:{hashed}\n"
     htaccess = """AuthType Basic
@@ -279,7 +271,6 @@ AuthUserFile /home/seiheki/www/.htpasswd
 Require valid-user
 """
 
-    # FTP転送
     print("📡 FTP転送中...")
     try:
         with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS) as ftp:
