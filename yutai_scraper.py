@@ -10,7 +10,7 @@ from io import BytesIO
 FTP_HOST = os.getenv("FTP_HOST")
 FTP_USER = os.getenv("FTP_USER")
 FTP_PASS = os.getenv("FTP_PASS")
-FTP_DIR  = "/www/"
+FTP_DIR  = "www"
 
 API_URL = "https://gokigen-life.tokyo/api/00ForWeb/ForZaiko2.php"
 HEADERS = {
