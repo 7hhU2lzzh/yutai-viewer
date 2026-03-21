@@ -31,42 +31,6 @@ REFERER_MAP = {
     12: "https://gokigen-life.tokyo/201912yutai-all-list/",
 }
 
-def fmt_vol(v):
-    if not v or str(v) in ["0", "-", "None", ""]:
-        return '<td class="text-center" data-value="0"><span class="zero-val">-</span></td>'
-    num = int(v)
-    return f'<td class="text-center" data-value="{num}"><span class="stock-val">{num:,}</span></td>'
-
-def gyaku_class(days):
-    try:
-        d = int(days)
-        if d >= 5: return "row-danger"
-        if d >= 3: return "row-warning"
-        if d >= 1: return "row-success"
-    except:
-        pass
-    return ""
-
-def days_until(kenri_date_str):
-    try:
-        now = datetime.now()
-        s = kenri_date_str.replace("月", "/").replace("日", "").replace("<br>", " ").split()[0]
-        parts = s.split("/")
-        month = int(parts[0])
-        day   = int(parts[1])
-        target = datetime(now.year, month, day)
-        if target < now:
-            target = datetime(now.year + 1, month, day)
-        diff = (target - now).days
-        if diff <= 7:
-            return f'<span class="badge-days danger">あと{diff}日</span>'
-        elif diff <= 30:
-            return f'<span class="badge-days warning">あと{diff}日</span>'
-        else:
-            return f'<span class="badge-days normal">あと{diff}日</span>'
-    except:
-        return ""
-
 def main():
     all_data = []
     print("🚀 取得開始...")
@@ -84,8 +48,20 @@ def main():
                 data = res.json()
                 for r in data:
                     if r.get("code") and r.get("code") != "0000":
-                        r["target_month"] = month
-                        all_data.append(r)
+                        all_data.append({
+                            "month":  month,
+                            "code":   r.get("code", ""),
+                            "name":   r.get("name", "") or "",
+                            "yutai":  r.get("yutai", "") or "",
+                            "gyaku":  int(r.get("gyaku_days", 0) or 0),
+                            "kenri":  r.get("d_kenri", "") or "",
+                            "nvol":   int(r.get("nvol", 0) or 0),
+                            "kvol":   int(r.get("kvol", 0) or 0),
+                            "rvol":   int(r.get("rvol", 0) or 0),
+                            "svol":   int(r.get("svol", 0) or 0),
+                            "gvol":   int(r.get("gvol", 0) or 0),
+                            "mvol":   int(r.get("mvol", 0) or 0),
+                        })
             print(f"  {month}月: OK")
             time.sleep(1)
         except Exception as e:
@@ -98,66 +74,8 @@ def main():
     current_month = datetime.now().month
     update_time   = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    rows_by_month = {m: "" for m in range(1, 13)}
-    for r in all_data:
-        m         = r["target_month"]
-        gc        = gyaku_class(r.get("gyaku_days", 0))
-        kenri     = r.get("d_kenri") or ""
-        countdown = days_until(kenri) if kenri else ""
-        has_stock = any([
-            r.get('nvol') and str(r.get('nvol')) not in ["0", ""],
-            r.get('kvol') and str(r.get('kvol')) not in ["0", ""],
-            r.get('rvol') and str(r.get('rvol')) not in ["0", ""],
-            r.get('svol') and str(r.get('svol')) not in ["0", ""],
-            r.get('gvol') and str(r.get('gvol')) not in ["0", ""],
-            r.get('mvol') and str(r.get('mvol')) not in ["0", ""],
-        ])
-        stock_flag = "has-stock" if has_stock else "no-stock"
-
-        rows_by_month[m] += f"""
-            <tr class="{gc} {stock_flag}">
-                <td data-value="0"><span class="code-badge">{r.get('code','')}</span></td>
-                <td data-value="0">
-                    <strong>{r.get('name','')}</strong><br>
-                    <small class="yutai-text">{r.get('yutai','')}</small><br>
-                    <small class="kenri-text">権利日: {kenri} {countdown}</small>
-                </td>
-                <td class="text-center" data-value="{r.get('gyaku_days','0')}">
-                    <span class="gyaku-val">{r.get('gyaku_days','0')}日</span>
-                </td>
-                {fmt_vol(r.get('nvol'))}
-                {fmt_vol(r.get('kvol'))}
-                {fmt_vol(r.get('rvol'))}
-                {fmt_vol(r.get('svol'))}
-                {fmt_vol(r.get('gvol'))}
-                {fmt_vol(r.get('mvol'))}
-            </tr>"""
-
-    tabs_html   = ""
-    panels_html = ""
-    for m in range(1, 13):
-        active  = "active" if m == current_month else ""
-        display = "block"  if m == current_month else "none"
-        tabs_html += f'<a class="tab-btn {active}" href="#" data-month="{m}">{m}月</a>'
-        panels_html += f"""
-        <div id="month-{m}" class="month-panel" style="display:{display}">
-            <table class="data-table" id="tbl-{m}">
-                <thead>
-                    <tr>
-                        <th data-label="コード">コード</th>
-                        <th data-label="銘柄名・優待">銘柄名・優待</th>
-                        <th class="text-center" data-label="逆日歩">逆日歩</th>
-                        <th class="text-center" data-label="日興">日興</th>
-                        <th class="text-center" data-label="カブコム">カブコム</th>
-                        <th class="text-center" data-label="楽天">楽天</th>
-                        <th class="text-center" data-label="SBI">SBI</th>
-                        <th class="text-center" data-label="GMO">GMO</th>
-                        <th class="text-center" data-label="松井">松井</th>
-                    </tr>
-                </thead>
-                <tbody>{rows_by_month[m]}</tbody>
-            </table>
-        </div>"""
+    import json
+    data_json = json.dumps(all_data, ensure_ascii=False)
 
     html = f"""<!DOCTYPE html>
 <html lang="ja">
@@ -176,7 +94,7 @@ def main():
         .search-input:focus {{ border-color: #aaa; background: #fff; }}
         .toggle-label {{ display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; white-space: nowrap; cursor: pointer; }}
         .tabs {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }}
-        .tab-btn {{ display: inline-block; padding: 12px 14px; font-size: 13px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }}
+        .tab-btn {{ display: inline-block; padding: 12px 14px; font-size: 13px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }}
         .tab-btn:hover {{ color: #333; }}
         .tab-btn.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
         .table-wrap {{ overflow-x: auto; }}
@@ -200,8 +118,6 @@ def main():
         .badge-days.danger  {{ background: #fde8e8; color: #9b2335; }}
         .badge-days.warning {{ background: #fef3e0; color: #a06000; }}
         .badge-days.normal  {{ background: #f0ede6; color: #888; }}
-        .no-stock {{ opacity: 0.35; }}
-        .text-center {{ text-align: center; }}
         .container {{ max-width: 1300px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.06); }}
     </style>
 </head>
@@ -218,79 +134,129 @@ def main():
             在庫ありのみ
         </label>
     </div>
-    <div class="tabs" id="monthTabs">
-        {tabs_html}
-    </div>
+    <div class="tabs" id="monthTabs"></div>
     <div class="table-wrap">
-        {panels_html}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th data-label="コード">コード</th>
+                    <th data-label="銘柄名・優待">銘柄名・優待</th>
+                    <th data-label="逆日歩">逆日歩</th>
+                    <th data-label="日興">日興</th>
+                    <th data-label="カブコム">カブコム</th>
+                    <th data-label="楽天">楽天</th>
+                    <th data-label="SBI">SBI</th>
+                    <th data-label="GMO">GMO</th>
+                    <th data-label="松井">松井</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
     </div>
 </div>
 
 <script>
-// 月タブ切り替え
-document.querySelectorAll('.tab-btn').forEach(tab => {{
-    tab.addEventListener('click', function(e) {{
-        e.preventDefault();
-        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
-        document.querySelectorAll('.month-panel').forEach(p => p.style.display = 'none');
-        document.getElementById('month-' + this.dataset.month).style.display = 'block';
-        applyFilters();
-    }});
-}});
+const allData = {data_json};
+let currentMonth = {current_month};
+let sortCol = -1;
+let sortAsc = true;
 
-// フィルター
-function applyFilters() {{
-    const q         = document.getElementById('search').value.toLowerCase();
-    const stockOnly = document.getElementById('stockOnly').checked;
-    document.querySelectorAll('.month-panel').forEach(panel => {{
-        if (panel.style.display === 'none') return;
-        panel.querySelectorAll('tbody tr').forEach(row => {{
-            const matchSearch = row.textContent.toLowerCase().includes(q);
-            const matchStock  = !stockOnly || row.classList.contains('has-stock');
-            row.style.display = (matchSearch && matchStock) ? '' : 'none';
-        }});
+// タブ生成
+const tabs = document.getElementById('monthTabs');
+for (let m = 1; m <= 12; m++) {{
+    const a = document.createElement('a');
+    a.className = 'tab-btn' + (m === currentMonth ? ' active' : '');
+    a.textContent = m + '月';
+    a.dataset.month = m;
+    a.addEventListener('click', () => {{
+        currentMonth = m;
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        a.classList.add('active');
+        sortCol = -1;
+        sortAsc = true;
+        document.querySelectorAll('.data-table thead th').forEach(t => t.textContent = t.dataset.label);
+        renderTable();
     }});
+    tabs.appendChild(a);
 }}
 
-document.getElementById('search').addEventListener('input', applyFilters);
-document.getElementById('stockOnly').addEventListener('change', applyFilters);
-applyFilters();
+function gyakuClass(d) {{
+    if (d >= 5) return 'row-danger';
+    if (d >= 3) return 'row-warning';
+    if (d >= 1) return 'row-success';
+    return '';
+}}
 
-// ソート
-let sortState = {{}};
+function daysUntil(kenri) {{
+    if (!kenri) return '';
+    try {{
+        const now = new Date();
+        const s = kenri.replace(/<br>/g, ' ').split(' ')[0];
+        const parts = s.match(/(\d+)月(\d+)日/);
+        if (!parts) return '';
+        let target = new Date(now.getFullYear(), parseInt(parts[1]) - 1, parseInt(parts[2]));
+        if (target < now) target.setFullYear(now.getFullYear() + 1);
+        const diff = Math.ceil((target - now) / 86400000);
+        if (diff <= 7)  return `<span class="badge-days danger">あと${{diff}}日</span>`;
+        if (diff <= 30) return `<span class="badge-days warning">あと${{diff}}日</span>`;
+        return `<span class="badge-days normal">あと${{diff}}日</span>`;
+    }} catch(e) {{ return ''; }}
+}}
+
+function fmt(v) {{
+    if (!v) return `<td class="text-center"><span class="zero-val">-</span></td>`;
+    return `<td class="text-center"><span class="stock-val">${{v.toLocaleString()}}</span></td>`;
+}}
+
+function renderTable() {{
+    const q         = document.getElementById('search').value.toLowerCase();
+    const stockOnly = document.getElementById('stockOnly').checked;
+
+    let rows = allData.filter(r => r.month === currentMonth);
+
+    if (sortCol >= 0) {{
+        const keys = ['code','name','gyaku','nvol','kvol','rvol','svol','gvol','mvol'];
+        const key = keys[sortCol];
+        rows.sort((a, b) => {{
+            const aVal = typeof a[key] === 'number' ? a[key] : 0;
+            const bVal = typeof b[key] === 'number' ? b[key] : 0;
+            return sortAsc ? aVal - bVal : bVal - aVal;
+        }});
+    }}
+
+    const tbody = document.getElementById('tbody');
+    const hasStock = r => r.nvol || r.kvol || r.rvol || r.svol || r.gvol || r.mvol;
+
+    tbody.innerHTML = rows.map(r => {{
+        const matchSearch = (r.code + r.name + r.yutai).toLowerCase().includes(q);
+        const matchStock  = !stockOnly || hasStock(r);
+        if (!matchSearch || !matchStock) return '';
+        return `
+            <tr class="${{gyakuClass(r.gyaku)}}">
+                <td><span class="code-badge">${{r.code}}</span></td>
+                <td>
+                    <strong>${{r.name}}</strong><br>
+                    <small class="yutai-text">${{r.yutai}}</small><br>
+                    <small class="kenri-text">権利日: ${{r.kenri}} ${{daysUntil(r.kenri)}}</small>
+                </td>
+                <td class="text-center"><span class="gyaku-val">${{r.gyaku}}日</span></td>
+                ${{fmt(r.nvol)}}${{fmt(r.kvol)}}${{fmt(r.rvol)}}${{fmt(r.svol)}}${{fmt(r.gvol)}}${{fmt(r.mvol)}}
+            </tr>`;
+    }}).join('');
+}}
+
+renderTable();
+
+document.getElementById('search').addEventListener('input', renderTable);
+document.getElementById('stockOnly').addEventListener('change', renderTable);
+
 document.querySelectorAll('.data-table thead th').forEach((th, colIndex) => {{
     th.addEventListener('click', () => {{
-        const table = th.closest('table');
-        const panel = table.closest('.month-panel');
-        if (panel.style.display === 'none') return;
-        const tableId = panel.id;
-        if (!sortState[tableId]) sortState[tableId] = {{ col: -1, asc: true }};
-        const state = sortState[tableId];
-
-        state.asc = (state.col === colIndex) ? !state.asc : false;
-        state.col = colIndex;
-
-        const tbody = table.querySelector('tbody');
-        const rows  = Array.from(tbody.querySelectorAll('tr'));
-
-        // 一旦全行表示してからソート
-        rows.forEach(r => r.style.display = '');
-
-        rows.sort((a, b) => {{
-            const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
-            const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
-            return state.asc ? aVal - bVal : bVal - aVal;
-        }});
-
-        table.querySelectorAll('thead th').forEach(t => {{
-            t.textContent = t.dataset.label;
-        }});
-        th.textContent = th.dataset.label + (state.asc ? ' ▲' : ' ▼');
-        rows.forEach(r => tbody.appendChild(r));
-
-        // フィルター再適用
-        applyFilters();
+        sortAsc = (sortCol === colIndex) ? !sortAsc : false;
+        sortCol = colIndex;
+        document.querySelectorAll('.data-table thead th').forEach(t => t.textContent = t.dataset.label);
+        th.textContent = th.dataset.label + (sortAsc ? ' ▲' : ' ▼');
+        renderTable();
     }});
 }});
 </script>
