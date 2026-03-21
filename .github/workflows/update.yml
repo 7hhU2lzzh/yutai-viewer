@@ -1,13 +1,13 @@
 name: 3-Hour Yutai Update
-
 on:
   schedule:
-    - cron: '0 */3 * * *' # 3時間ごと
-  workflow_dispatch:      # 手動実行ボタンを表示
-
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
@@ -15,7 +15,7 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install dependencies
-        run: pip install requests pandas
+        run: pip install requests
       - name: Run Scraper
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
@@ -24,3 +24,10 @@ jobs:
           BASIC_USER: ${{ secrets.BASIC_USER }}
           BASIC_PASS: ${{ secrets.BASIC_PASS }}
         run: python yutai_scraper.py
+      - name: Commit kokuzetsu.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add kokuzetsu.json prev.json
+          git diff --staged --quiet || git commit -m "Update kokuzetsu.json"
+          git push
