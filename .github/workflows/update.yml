@@ -21,4 +21,6 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
+          BASIC_USER: ${{ secrets.BASIC_USER }}
+          BASIC_PASS: ${{ secrets.BASIC_PASS }}
         run: python yutai_scraper.py
