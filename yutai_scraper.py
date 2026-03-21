@@ -1,19 +1,21 @@
 import requests
-import pandas as pd
 import time
 import os
 import ftplib
-import json
+import crypt
 from io import BytesIO
+from datetime import datetime
 
-FTP_HOST = os.getenv("FTP_HOST")
-FTP_USER = os.getenv("FTP_USER")
-FTP_PASS = os.getenv("FTP_PASS")
-FTP_DIR  = "www"
+# --- 設定 ---
+FTP_HOST   = os.getenv("FTP_HOST")
+FTP_USER   = os.getenv("FTP_USER")
+FTP_PASS   = os.getenv("FTP_PASS")
+FTP_DIR    = "www"
+BASIC_USER = os.getenv("BASIC_USER")
+BASIC_PASS = os.getenv("BASIC_PASS")
 
 API_URL = "https://gokigen-life.tokyo/api/00ForWeb/ForZaiko2.php"
 
-# ✅ 月ごとのReferer
 REFERER_MAP = {
     1:  "https://gokigen-life.tokyo/20201yutai-all-list/",
     2:  "https://gokigen-life.tokyo/20202yutai-all-list/",
@@ -29,11 +31,51 @@ REFERER_MAP = {
     12: "https://gokigen-life.tokyo/201912yutai-all-list/",
 }
 
+GYAKU_MAP = {
+    1: "table-success",   # 緑
+    2: "table-success",
+    3: "table-warning",   # 黄
+    4: "table-warning",
+    5: "table-danger",    # 赤
+}
+
 def fmt_vol(v):
-    """在庫数のフォーマット"""
     if not v or str(v) in ["0", "-", "None", ""]:
         return '<span class="zero-val">-</span>'
     return f'<span class="stock-val">{v}</span>'
+
+def gyaku_class(days):
+    try:
+        d = int(days)
+        if d >= 5: return "table-danger"
+        if d >= 3: return "table-warning"
+        if d >= 1: return "table-success"
+    except:
+        pass
+    return ""
+
+def days_until(kenri_date_str):
+    """権利日まであと何日か計算"""
+    try:
+        # 例: "3月27日" → パース
+        now = datetime.now()
+        s = kenri_date_str.replace("月", "/").replace("日", "").replace("<br>", " ").split()[0]
+        parts = s.split("/")
+        month = int(parts[0])
+        day = int(parts[1])
+        year = now.year
+        target = datetime(year, month, day)
+        if target < now:
+            target = datetime(year + 1, month, day)
+        diff = (target - now).days
+        if diff <= 7:
+            return f'<span class="badge bg-danger">あと{diff}日</span>'
+        elif diff <= 30:
+            return f'<span class="badge bg-warning text-dark">あと{diff}日</span>'
+        else:
+            return f'<span class="text-muted small">あと{diff}日</span>'
+    except:
+        return ""
 
 def main():
     all_data = []
@@ -44,7 +86,7 @@ def main():
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15",
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
             "Origin": "https://gokigen-life.tokyo",
-            "Referer": REFERER_MAP[month],  # ✅ 月ごとに切り替え
+            "Referer": REFERER_MAP[month],
         }
         try:
             res = requests.post(API_URL, headers=headers, data={"month": month}, timeout=30)
@@ -52,9 +94,9 @@ def main():
                 data = res.json()
                 for r in data:
                     if r.get("code") and r.get("code") != "0000":
-                        r["target_month"] = f"{month}月"
+                        r["target_month"] = month
                         all_data.append(r)
-            print(f"  {month}月: {len([r for r in all_data if r.get('target_month')==f'{month}月'])}件")
+            print(f"  {month}月: OK")
             time.sleep(1)
         except Exception as e:
             print(f"  ⚠️ {month}月 エラー: {e}")
@@ -63,16 +105,35 @@ def main():
         print("データなし")
         return
 
-    update_time = time.strftime('%Y-%m-%d %H:%M')
+    current_month = datetime.now().month
+    update_time   = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    rows = ""
+    # 月ごとの行HTML生成
+    rows_by_month = {m: "" for m in range(1, 13)}
     for r in all_data:
-        rows += f"""
-            <tr>
-                <td>{r.get('target_month','')}</td>
+        m       = r["target_month"]
+        gc      = gyaku_class(r.get("gyaku_days", 0))
+        kenri   = r.get("d_kenri") or ""
+        countdown = days_until(kenri) if kenri else ""
+        has_stock = any([
+            r.get('nvol') and str(r.get('nvol')) not in ["0",""],
+            r.get('kvol') and str(r.get('kvol')) not in ["0",""],
+            r.get('rvol') and str(r.get('rvol')) not in ["0",""],
+            r.get('svol') and str(r.get('svol')) not in ["0",""],
+            r.get('gvol') and str(r.get('gvol')) not in ["0",""],
+            r.get('mvol') and str(r.get('mvol')) not in ["0",""],
+        ])
+        stock_flag = "has-stock" if has_stock else "no-stock"
+
+        rows_by_month[m] += f"""
+            <tr class="{gc} {stock_flag}">
                 <td><span class="badge border text-dark">{r.get('code','')}</span></td>
-                <td><strong>{r.get('name','')}</strong><br>
-                    <small class="text-muted">{r.get('yutai','')}</small></td>
+                <td>
+                    <strong>{r.get('name','')}</strong><br>
+                    <small class="text-muted">{r.get('yutai','')}</small><br>
+                    <small>権利日: {kenri} {countdown}</small>
+                </td>
+                <td class="text-center small">逆日歩<br><strong>{r.get('gyaku_days','0')}日</strong></td>
                 <td class="text-center">{fmt_vol(r.get('nvol'))}</td>
                 <td class="text-center">{fmt_vol(r.get('kvol'))}</td>
                 <td class="text-center">{fmt_vol(r.get('rvol'))}</td>
@@ -80,6 +141,35 @@ def main():
                 <td class="text-center">{fmt_vol(r.get('gvol'))}</td>
                 <td class="text-center">{fmt_vol(r.get('mvol'))}</td>
             </tr>"""
+
+    # タブと中身のHTML
+    tabs_html   = ""
+    panels_html = ""
+    for m in range(1, 13):
+        active  = "active" if m == current_month else ""
+        display = "block"  if m == current_month else "none"
+        tabs_html += f'<li class="nav-item"><a class="nav-link {active}" href="#" data-month="{m}">{m}月</a></li>'
+        panels_html += f"""
+        <div id="month-{m}" class="month-panel" style="display:{display}">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 sortable-table">
+                    <thead class="table-light">
+                        <tr>
+                            <th>コード</th>
+                            <th>銘柄名・優待</th>
+                            <th class="text-center">逆日歩</th>
+                            <th class="text-center">日興</th>
+                            <th class="text-center">カブコム</th>
+                            <th class="text-center">楽天</th>
+                            <th class="text-center">SBI</th>
+                            <th class="text-center">GMO</th>
+                            <th class="text-center">松井</th>
+                        </tr>
+                    </thead>
+                    <tbody>{rows_by_month[m]}</tbody>
+                </table>
+            </div>
+        </div>"""
 
     html = f"""<!DOCTYPE html>
 <html lang="ja">
@@ -91,52 +181,126 @@ def main():
     <style>
         body {{ background-color: #f0f2f5; }}
         .stock-val {{ font-weight: bold; color: #dc3545; }}
-        .zero-val {{ color: #adb5bd; }}
+        .zero-val  {{ color: #adb5bd; }}
+        .nav-link  {{ color: #495057; }}
+        .nav-link.active {{ background: #0062E6 !important; color: white !important; border-radius: 6px; }}
+        th {{ cursor: pointer; user-select: none; white-space: nowrap; }}
+        th:hover {{ background-color: #e9ecef; }}
+        .no-stock {{ opacity: 0.4; }}
     </style>
 </head>
 <body>
-<div class="container mt-3" style="max-width:1200px">
+<div class="container mt-3" style="max-width:1300px">
     <div class="card shadow-sm">
+        <!-- ヘッダー -->
         <div class="p-3 text-white" style="background:linear-gradient(135deg,#0062E6,#33AEFF);border-radius:8px 8px 0 0">
             <h1 class="h5 mb-0">🎁 優待在庫ビューワー
                 <span class="badge bg-light text-primary float-end">更新: {update_time}</span>
             </h1>
         </div>
-        <div class="p-3 bg-white border-bottom">
+
+        <!-- 検索 + 在庫フィルター -->
+        <div class="p-3 bg-white border-bottom d-flex gap-3 align-items-center">
             <input type="text" id="search" class="form-control" placeholder="銘柄名・コードで検索...">
+            <div class="form-check form-switch mb-0 text-nowrap">
+                <input class="form-check-input" type="checkbox" id="stockOnly" checked>
+                <label class="form-check-label" for="stockOnly">在庫ありのみ</label>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" id="tbl">
-                <thead class="table-light">
-                    <tr>
-                        <th>月</th><th>コード</th><th>銘柄名・優待</th>
-                        <th class="text-center">日興</th><th class="text-center">カブコム</th>
-                        <th class="text-center">楽天</th><th class="text-center">SBI</th>
-                        <th class="text-center">GMO</th><th class="text-center">松井</th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-            </table>
+
+        <!-- 月タブ -->
+        <div class="px-3 pt-2 bg-white border-bottom">
+            <ul class="nav nav-pills gap-1 flex-wrap" id="monthTabs">
+                {tabs_html}
+            </ul>
+        </div>
+
+        <!-- テーブルパネル -->
+        <div class="bg-white">
+            {panels_html}
         </div>
     </div>
 </div>
+
 <script>
-document.getElementById('search').addEventListener('input', function() {{
-    const q = this.value.toLowerCase();
-    document.querySelectorAll('#tbl tbody tr').forEach(r => {{
-        r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+// 月タブ切り替え
+document.querySelectorAll('#monthTabs a').forEach(tab => {{
+    tab.addEventListener('click', function(e) {{
+        e.preventDefault();
+        document.querySelectorAll('#monthTabs a').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.month-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('month-' + this.dataset.month).style.display = 'block';
+        applyFilters();
+    }});
+}});
+
+// フィルター適用（検索 + 在庫あり）
+function applyFilters() {{
+    const q         = document.getElementById('search').value.toLowerCase();
+    const stockOnly = document.getElementById('stockOnly').checked;
+    document.querySelectorAll('.month-panel').forEach(panel => {{
+        if (panel.style.display === 'none') return;
+        panel.querySelectorAll('tbody tr').forEach(row => {{
+            const matchSearch = row.textContent.toLowerCase().includes(q);
+            const matchStock  = !stockOnly || row.classList.contains('has-stock');
+            row.style.display = (matchSearch && matchStock) ? '' : 'none';
+        }});
+    }});
+}}
+
+document.getElementById('search').addEventListener('input', applyFilters);
+document.getElementById('stockOnly').addEventListener('change', applyFilters);
+applyFilters();
+
+// ソート
+let sortState = {{}};
+document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => {{
+    th.addEventListener('click', () => {{
+        const table   = th.closest('table');
+        const tableId = table.closest('.month-panel').id;
+        if (!sortState[tableId]) sortState[tableId] = {{ col: -1, asc: true }};
+        const state   = sortState[tableId];
+
+        state.asc = (state.col === colIndex) ? !state.asc : false;
+        state.col = colIndex;
+
+        const tbody = table.querySelector('tbody');
+        const rows  = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a, b) => {{
+            const aVal = parseInt(a.cells[colIndex]?.textContent.replace(/[^0-9]/g, '') || '0') || 0;
+            const bVal = parseInt(b.cells[colIndex]?.textContent.replace(/[^0-9]/g, '') || '0') || 0;
+            return state.asc ? aVal - bVal : bVal - aVal;
+        }});
+
+        table.querySelectorAll('thead th').forEach(t => {{
+            t.textContent = t.textContent.replace(/[ ▲▼]/g, '').trim();
+        }});
+        th.textContent += state.asc ? ' ▲' : ' ▼';
+        rows.forEach(r => tbody.appendChild(r));
     }});
 }});
 </script>
 </body>
 </html>"""
 
+    # Basic認証ファイル生成
+    hashed   = crypt.crypt(BASIC_PASS, crypt.mksalt(crypt.METHOD_SHA512))
+    htpasswd = f"{BASIC_USER}:{hashed}\n"
+    htaccess = """AuthType Basic
+AuthName "Private Area"
+AuthUserFile /home/seiheki/www/.htpasswd
+Require valid-user
+"""
+
     # FTP転送
-    print(f"📡 FTP転送中...")
+    print("📡 FTP転送中...")
     try:
         with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS) as ftp:
             ftp.cwd(FTP_DIR)
             ftp.storbinary("STOR index.html", BytesIO(html.encode('utf-8')))
+            ftp.storbinary("STOR .htpasswd",  BytesIO(htpasswd.encode('utf-8')))
+            ftp.storbinary("STOR .htaccess",  BytesIO(htaccess.encode('utf-8')))
             print("✅ 完了！")
     except Exception as e:
         print(f"❌ FTPエラー: {e}")
