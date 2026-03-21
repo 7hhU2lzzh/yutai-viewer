@@ -5,7 +5,8 @@ import ftplib
 import crypt
 import json
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+JST = timezone(timedelta(hours=9))
 
 # --- 設定 ---
 FTP_HOST   = os.getenv("FTP_HOST")
@@ -36,7 +37,7 @@ FIRMS     = ['nvol', 'kvol', 'rvol', 'svol', 'gvol', 'mvol']
 FIRM_NAMES = {'nvol':'日興', 'kvol':'カブコム', 'rvol':'楽天', 'svol':'SBI', 'gvol':'GMO', 'mvol':'松井'}
 
 def main():
-    now          = datetime.now()
+    now = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
