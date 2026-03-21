@@ -31,14 +31,6 @@ REFERER_MAP = {
     12: "https://gokigen-life.tokyo/201912yutai-all-list/",
 }
 
-GYAKU_MAP = {
-    1: "table-success",   # 緑
-    2: "table-success",
-    3: "table-warning",   # 黄
-    4: "table-warning",
-    5: "table-danger",    # 赤
-}
-
 def fmt_vol(v):
     if not v or str(v) in ["0", "-", "None", ""]:
         return '<span class="zero-val">-</span>'
@@ -55,18 +47,15 @@ def gyaku_class(days):
     return ""
 
 def days_until(kenri_date_str):
-    """権利日まであと何日か計算"""
     try:
-        # 例: "3月27日" → パース
         now = datetime.now()
         s = kenri_date_str.replace("月", "/").replace("日", "").replace("<br>", " ").split()[0]
         parts = s.split("/")
         month = int(parts[0])
-        day = int(parts[1])
-        year = now.year
-        target = datetime(year, month, day)
+        day   = int(parts[1])
+        target = datetime(now.year, month, day)
         if target < now:
-            target = datetime(year + 1, month, day)
+            target = datetime(now.year + 1, month, day)
         diff = (target - now).days
         if diff <= 7:
             return f'<span class="badge bg-danger">あと{diff}日</span>'
@@ -111,17 +100,17 @@ def main():
     # 月ごとの行HTML生成
     rows_by_month = {m: "" for m in range(1, 13)}
     for r in all_data:
-        m       = r["target_month"]
-        gc      = gyaku_class(r.get("gyaku_days", 0))
-        kenri   = r.get("d_kenri") or ""
+        m         = r["target_month"]
+        gc        = gyaku_class(r.get("gyaku_days", 0))
+        kenri     = r.get("d_kenri") or ""
         countdown = days_until(kenri) if kenri else ""
         has_stock = any([
-            r.get('nvol') and str(r.get('nvol')) not in ["0",""],
-            r.get('kvol') and str(r.get('kvol')) not in ["0",""],
-            r.get('rvol') and str(r.get('rvol')) not in ["0",""],
-            r.get('svol') and str(r.get('svol')) not in ["0",""],
-            r.get('gvol') and str(r.get('gvol')) not in ["0",""],
-            r.get('mvol') and str(r.get('mvol')) not in ["0",""],
+            r.get('nvol') and str(r.get('nvol')) not in ["0", ""],
+            r.get('kvol') and str(r.get('kvol')) not in ["0", ""],
+            r.get('rvol') and str(r.get('rvol')) not in ["0", ""],
+            r.get('svol') and str(r.get('svol')) not in ["0", ""],
+            r.get('gvol') and str(r.get('gvol')) not in ["0", ""],
+            r.get('mvol') and str(r.get('mvol')) not in ["0", ""],
         ])
         stock_flag = "has-stock" if has_stock else "no-stock"
 
@@ -198,7 +187,6 @@ def main():
                 <span class="badge bg-light text-primary float-end">更新: {update_time}</span>
             </h1>
         </div>
-
         <!-- 検索 + 在庫フィルター -->
         <div class="p-3 bg-white border-bottom d-flex gap-3 align-items-center">
             <input type="text" id="search" class="form-control" placeholder="銘柄名・コードで検索...">
@@ -207,14 +195,12 @@ def main():
                 <label class="form-check-label" for="stockOnly">在庫ありのみ</label>
             </div>
         </div>
-
         <!-- 月タブ -->
         <div class="px-3 pt-2 bg-white border-bottom">
             <ul class="nav nav-pills gap-1 flex-wrap" id="monthTabs">
                 {tabs_html}
             </ul>
         </div>
-
         <!-- テーブルパネル -->
         <div class="bg-white">
             {panels_html}
