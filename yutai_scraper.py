@@ -3,6 +3,7 @@ import time
 import os
 import ftplib
 import crypt
+import json
 from io import BytesIO
 from datetime import datetime
 
@@ -31,10 +32,28 @@ REFERER_MAP = {
     12: "https://gokigen-life.tokyo/201912yutai-all-list/",
 }
 
+FIRMS = ['nvol', 'kvol', 'rvol', 'svol', 'gvol', 'mvol']
+FIRM_NAMES = {'nvol':'日興', 'kvol':'カブコム', 'rvol':'楽天', 'svol':'SBI', 'gvol':'GMO', 'mvol':'松井'}
+
 def main():
+    now       = datetime.now()
+    today_str = now.strftime('%m/%d')
+    update_time = now.strftime('%Y-%m-%d %H:%M')
+
+    # --- prev.json と kokuzetsu.json を読む ---
+    prev_data = {}
+    if os.path.exists("prev.json"):
+        with open("prev.json", "r", encoding="utf-8") as f:
+            prev_data = json.load(f)
+
+    kokuzetsu = {}
+    if os.path.exists("kokuzetsu.json"):
+        with open("kokuzetsu.json", "r", encoding="utf-8") as f:
+            kokuzetsu = json.load(f)
+
+    # --- クロール ---
     all_data = []
     print("🚀 取得開始...")
-
     for month in range(1, 13):
         headers = {
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15",
@@ -49,18 +68,18 @@ def main():
                 for r in data:
                     if r.get("code") and r.get("code") != "0000":
                         all_data.append({
-                            "month":  month,
-                            "code":   r.get("code", ""),
-                            "name":   r.get("name", "") or "",
-                            "yutai":  r.get("yutai", "") or "",
-                            "gyaku":  int(r.get("gyaku_days", 0) or 0),
-                            "kenri":  r.get("d_kenri", "") or "",
-                            "nvol":   int(r.get("nvol", 0) or 0),
-                            "kvol":   int(r.get("kvol", 0) or 0),
-                            "rvol":   int(r.get("rvol", 0) or 0),
-                            "svol":   int(r.get("svol", 0) or 0),
-                            "gvol":   int(r.get("gvol", 0) or 0),
-                            "mvol":   int(r.get("mvol", 0) or 0),
+                            "month": month,
+                            "code":  r.get("code", ""),
+                            "name":  r.get("name", "") or "",
+                            "yutai": r.get("yutai", "") or "",
+                            "gyaku": int(r.get("gyaku_days", 0) or 0),
+                            "kenri": r.get("d_kenri", "") or "",
+                            "nvol":  int(r.get("nvol", 0) or 0),
+                            "kvol":  int(r.get("kvol", 0) or 0),
+                            "rvol":  int(r.get("rvol", 0) or 0),
+                            "svol":  int(r.get("svol", 0) or 0),
+                            "gvol":  int(r.get("gvol", 0) or 0),
+                            "mvol":  int(r.get("mvol", 0) or 0),
                         })
             print(f"  {month}月: OK")
             time.sleep(1)
@@ -71,11 +90,43 @@ def main():
         print("データなし")
         return
 
-    current_month = datetime.now().month
-    update_time   = datetime.now().strftime('%Y-%m-%d %H:%M')
+    # --- 枯渇検出 ---
+    print("🔍 枯渇検出中...")
+    for r in all_data:
+        code = r["code"]
+        key  = f"{r['month']}_{code}"  # 月_コードをキーにする
+        prev = prev_data.get(key, {})
 
-    import json
-    data_json = json.dumps(all_data, ensure_ascii=False)
+        if code not in kokuzetsu:
+            kokuzetsu[key] = {"code": code, "name": r["name"], "month": r["month"], "firms": {}}
+
+        for f in FIRMS:
+            prev_vol = prev.get(f, 0)
+            curr_vol = r[f]
+            # 在庫あり→なし かつ まだ枯渇日が記録されていない
+            if prev_vol > 0 and curr_vol == 0:
+                if f not in kokuzetsu[key]["firms"]:
+                    kokuzetsu[key]["firms"][f] = today_str
+                    print(f"  枯渇検出: {r['name']} {FIRM_NAMES[f]} {today_str}")
+
+    # --- prev.json を更新 ---
+    new_prev = {}
+    for r in all_data:
+        key = f"{r['month']}_{r['code']}"
+        new_prev[key] = {f: r[f] for f in FIRMS}
+
+    with open("prev.json", "w", encoding="utf-8") as f:
+        json.dump(new_prev, f, ensure_ascii=False, indent=2)
+
+    with open("kokuzetsu.json", "w", encoding="utf-8") as f:
+        json.dump(kokuzetsu, f, ensure_ascii=False, indent=2)
+
+    print("✅ kokuzetsu.json 更新完了")
+
+    # --- HTML生成 ---
+    current_month = now.month
+    data_json      = json.dumps(all_data,   ensure_ascii=False)
+    kokuzetsu_json = json.dumps(kokuzetsu,  ensure_ascii=False)
 
     html = f"""<!DOCTYPE html>
 <html lang="ja">
@@ -87,7 +138,7 @@ def main():
         * {{ box-sizing: border-box; margin: 0; padding: 0; }}
         body {{ background: #f7f6f2; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; font-size: 14px; color: #333; }}
         .header {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }}
-        .header h1 {{ font-size: 18px; font-weight: 600; color: #333; }}
+        .header h1 {{ font-size: 18px; font-weight: 600; }}
         .update-badge {{ background: #f0ede6; color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }}
         .toolbar {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 12px 24px; display: flex; gap: 16px; align-items: center; }}
         .search-input {{ flex: 1; border: 1px solid #e0ddd6; border-radius: 6px; padding: 8px 12px; font-size: 14px; outline: none; background: #faf9f7; }}
@@ -97,6 +148,12 @@ def main():
         .tab-btn {{ display: inline-block; padding: 12px 14px; font-size: 13px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }}
         .tab-btn:hover {{ color: #333; }}
         .tab-btn.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
+        .month-tabs {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }}
+        .month-btn {{ display: inline-block; padding: 10px 12px; font-size: 13px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; cursor: pointer; }}
+        .month-btn:hover {{ color: #333; }}
+        .month-btn.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
+        .panel {{ display: none; }}
+        .panel.active {{ display: block; }}
         .table-wrap {{ overflow-x: auto; }}
         .data-table {{ width: 100%; border-collapse: collapse; }}
         .data-table thead th {{ background: #faf9f7; border-bottom: 1px solid #e8e6e0; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #888; text-align: center; cursor: pointer; user-select: none; white-space: nowrap; }}
@@ -104,7 +161,8 @@ def main():
         .data-table thead th:hover {{ background: #f0ede6; color: #333; }}
         .data-table tbody tr {{ border-bottom: 1px solid #f0ede6; }}
         .data-table tbody tr:hover {{ background: #faf9f7; }}
-        .data-table tbody td {{ padding: 12px 16px; vertical-align: middle; }}
+        .data-table tbody td {{ padding: 12px 16px; vertical-align: middle; text-align: center; }}
+        .data-table tbody td:first-child, .data-table tbody td:nth-child(2) {{ text-align: left; }}
         .row-success {{ background: #f0f7f0; }}
         .row-warning {{ background: #fffbf0; }}
         .row-danger  {{ background: #fff5f5; }}
@@ -114,10 +172,16 @@ def main():
         .gyaku-val  {{ font-size: 12px; color: #888; }}
         .stock-val {{ font-weight: 600; color: #9b2335; }}
         .zero-val  {{ color: #ccc; }}
+        .ok-val {{ color: #2d7a2d; font-weight: 600; }}
+        .ng-val {{ color: #9b2335; font-size: 12px; }}
         .badge-days {{ display: inline-block; border-radius: 20px; padding: 1px 8px; font-size: 11px; margin-left: 4px; }}
         .badge-days.danger  {{ background: #fde8e8; color: #9b2335; }}
         .badge-days.warning {{ background: #fef3e0; color: #a06000; }}
         .badge-days.normal  {{ background: #f0ede6; color: #888; }}
+        .tweet-box {{ background: #f7f6f2; border: 1px solid #e0ddd6; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.8; white-space: pre-wrap; font-family: monospace; margin: 16px 24px; }}
+        .copy-btn {{ margin: 0 24px 16px; border: 1px solid #e0ddd6; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; background: #fff; color: #555; }}
+        .copy-btn:hover {{ background: #f0ede6; }}
+        .section-title {{ padding: 16px 24px 8px; font-size: 13px; font-weight: 600; color: #555; }}
         .container {{ max-width: 1300px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.06); }}
     </style>
 </head>
@@ -127,58 +191,125 @@ def main():
         <h1>🎁 優待在庫ビューワー</h1>
         <span class="update-badge">更新: {update_time}</span>
     </div>
-    <div class="toolbar">
-        <input type="text" id="search" class="search-input" placeholder="銘柄名・コードで検索...">
-        <label class="toggle-label">
-            <input type="checkbox" id="stockOnly" checked>
-            在庫ありのみ
-        </label>
+
+    <!-- メインタブ -->
+    <div class="tabs">
+        <div class="tab-btn active" data-tab="zaiko">在庫状況</div>
+        <div class="tab-btn" data-tab="kokuzetsu">枯渇情報</div>
+        <div class="tab-btn" data-tab="tweet">ツイート原稿</div>
     </div>
-    <div class="tabs" id="monthTabs"></div>
-    <div class="table-wrap">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th data-label="コード">コード</th>
-                    <th data-label="銘柄名・優待">銘柄名・優待</th>
-                    <th data-label="逆日歩">逆日歩</th>
-                    <th data-label="日興">日興</th>
-                    <th data-label="カブコム">カブコム</th>
-                    <th data-label="楽天">楽天</th>
-                    <th data-label="SBI">SBI</th>
-                    <th data-label="GMO">GMO</th>
-                    <th data-label="松井">松井</th>
-                </tr>
-            </thead>
-            <tbody id="tbody"></tbody>
-        </table>
+
+    <!-- 在庫状況パネル -->
+    <div id="zaiko" class="panel active">
+        <div class="toolbar">
+            <input type="text" id="search" class="search-input" placeholder="銘柄名・コードで検索...">
+            <label class="toggle-label">
+                <input type="checkbox" id="stockOnly" checked>
+                在庫ありのみ
+            </label>
+        </div>
+        <div class="month-tabs" id="monthTabs"></div>
+        <div class="table-wrap">
+            <table class="data-table" id="stockTable">
+                <thead>
+                    <tr>
+                        <th data-label="コード">コード</th>
+                        <th data-label="銘柄名・優待">銘柄名・優待</th>
+                        <th data-label="逆日歩">逆日歩</th>
+                        <th data-label="日興">日興</th>
+                        <th data-label="カブコム">カブコム</th>
+                        <th data-label="楽天">楽天</th>
+                        <th data-label="SBI">SBI</th>
+                        <th data-label="GMO">GMO</th>
+                        <th data-label="松井">松井</th>
+                    </tr>
+                </thead>
+                <tbody id="stockTbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 枯渇情報パネル -->
+    <div id="kokuzetsu" class="panel">
+        <div class="month-tabs" id="kokuzetsuMonthTabs"></div>
+        <div class="table-wrap">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>コード</th>
+                        <th>銘柄名</th>
+                        <th>日興</th>
+                        <th>カブコム</th>
+                        <th>楽天</th>
+                        <th>SBI</th>
+                        <th>GMO</th>
+                        <th>松井</th>
+                    </tr>
+                </thead>
+                <tbody id="kokuzetsuTbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ツイート原稿パネル -->
+    <div id="tweet" class="panel">
+        <div class="month-tabs" id="tweetMonthTabs"></div>
+        <div class="section-title">📋 ツイート原稿①：完全枯渇リスト（来年用）</div>
+        <div class="tweet-box" id="tweet1"></div>
+        <button class="copy-btn" onclick="copyText('tweet1')">コピー</button>
+        <div class="section-title">📋 ツイート原稿②：まだ建てられる銘柄（リアルタイム）</div>
+        <div class="tweet-box" id="tweet2"></div>
+        <button class="copy-btn" onclick="copyText('tweet2')">コピー</button>
     </div>
 </div>
 
 <script>
-const allData = {data_json};
-let currentMonth = {current_month};
+const allData    = {data_json};
+const kokuzetsu  = {kokuzetsu_json};
+const firms      = ['nvol','kvol','rvol','svol','gvol','mvol'];
+const firmNames  = {{'nvol':'日興','kvol':'カブコム','rvol':'楽天','svol':'SBI','gvol':'GMO','mvol':'松井'}};
+
+let currentMonth      = {current_month};
+let currentKMonth     = {current_month};
+let currentTweetMonth = {current_month};
 let sortCol = -1;
 let sortAsc = true;
 
-// タブ生成
-const tabs = document.getElementById('monthTabs');
-for (let m = 1; m <= 12; m++) {{
-    const a = document.createElement('a');
-    a.className = 'tab-btn' + (m === currentMonth ? ' active' : '');
-    a.textContent = m + '月';
-    a.dataset.month = m;
-    a.addEventListener('click', () => {{
-        currentMonth = m;
-        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
-        a.classList.add('active');
-        sortCol = -1;
-        sortAsc = true;
-        document.querySelectorAll('.data-table thead th').forEach(t => t.textContent = t.dataset.label);
-        renderTable();
-    }});
-    tabs.appendChild(a);
+// 月タブ生成関数
+function buildMonthTabs(containerId, activeMonth, onClick) {{
+    const container = document.getElementById(containerId);
+    for (let m = 1; m <= 12; m++) {{
+        const a = document.createElement('a');
+        a.className  = 'month-btn' + (m === activeMonth ? ' active' : '');
+        a.textContent = m + '月';
+        a.addEventListener('click', () => {{
+            container.querySelectorAll('.month-btn').forEach(t => t.classList.remove('active'));
+            a.classList.add('active');
+            onClick(m);
+        }});
+        container.appendChild(a);
+    }}
 }}
+
+// 在庫状況
+buildMonthTabs('monthTabs', currentMonth, m => {{
+    currentMonth = m;
+    sortCol = -1; sortAsc = true;
+    document.querySelectorAll('#stockTable thead th').forEach(t => t.textContent = t.dataset.label);
+    renderStock();
+}});
+
+// 枯渇情報
+buildMonthTabs('kokuzetsuMonthTabs', currentKMonth, m => {{
+    currentKMonth = m;
+    renderKokuzetsu();
+}});
+
+// ツイート原稿
+buildMonthTabs('tweetMonthTabs', currentTweetMonth, m => {{
+    currentTweetMonth = m;
+    renderTweet();
+}});
 
 function gyakuClass(d) {{
     if (d >= 5) return 'row-danger';
@@ -191,11 +322,10 @@ function daysUntil(kenri) {{
     if (!kenri) return '';
     try {{
         const now = new Date();
-        const s = kenri.replace(/<br>/g, ' ').split(' ')[0];
-        const parts = s.match(/(\d+)月(\d+)日/);
+        const parts = kenri.match(/(\d+)月(\d+)日/);
         if (!parts) return '';
-        let target = new Date(now.getFullYear(), parseInt(parts[1]) - 1, parseInt(parts[2]));
-        if (target < now) target.setFullYear(now.getFullYear() + 1);
+        let target = new Date(now.getFullYear(), parseInt(parts[1])-1, parseInt(parts[2]));
+        if (target < now) target.setFullYear(now.getFullYear()+1);
         const diff = Math.ceil((target - now) / 86400000);
         if (diff <= 7)  return `<span class="badge-days danger">あと${{diff}}日</span>`;
         if (diff <= 30) return `<span class="badge-days warning">あと${{diff}}日</span>`;
@@ -203,62 +333,129 @@ function daysUntil(kenri) {{
     }} catch(e) {{ return ''; }}
 }}
 
-function fmt(v) {{
-    if (!v) return `<td class="text-center"><span class="zero-val">-</span></td>`;
-    return `<td class="text-center"><span class="stock-val">${{v.toLocaleString()}}</span></td>`;
-}}
-
-function renderTable() {{
+function renderStock() {{
     const q         = document.getElementById('search').value.toLowerCase();
     const stockOnly = document.getElementById('stockOnly').checked;
-
     let rows = allData.filter(r => r.month === currentMonth);
-
     if (sortCol >= 0) {{
         const keys = ['code','name','gyaku','nvol','kvol','rvol','svol','gvol','mvol'];
-        const key = keys[sortCol];
-        rows.sort((a, b) => {{
-            const aVal = typeof a[key] === 'number' ? a[key] : 0;
-            const bVal = typeof b[key] === 'number' ? b[key] : 0;
-            return sortAsc ? aVal - bVal : bVal - aVal;
+        const key  = keys[sortCol];
+        rows.sort((a,b) => {{
+            const av = typeof a[key]==='number' ? a[key] : 0;
+            const bv = typeof b[key]==='number' ? b[key] : 0;
+            return sortAsc ? av-bv : bv-av;
         }});
     }}
-
-    const tbody = document.getElementById('tbody');
-    const hasStock = r => r.nvol || r.kvol || r.rvol || r.svol || r.gvol || r.mvol;
-
-    tbody.innerHTML = rows.map(r => {{
-        const matchSearch = (r.code + r.name + r.yutai).toLowerCase().includes(q);
-        const matchStock  = !stockOnly || hasStock(r);
-        if (!matchSearch || !matchStock) return '';
-        return `
-            <tr class="${{gyakuClass(r.gyaku)}}">
-                <td><span class="code-badge">${{r.code}}</span></td>
-                <td>
-                    <strong>${{r.name}}</strong><br>
-                    <small class="yutai-text">${{r.yutai}}</small><br>
-                    <small class="kenri-text">権利日: ${{r.kenri}} ${{daysUntil(r.kenri)}}</small>
-                </td>
-                <td class="text-center"><span class="gyaku-val">${{r.gyaku}}日</span></td>
-                ${{fmt(r.nvol)}}${{fmt(r.kvol)}}${{fmt(r.rvol)}}${{fmt(r.svol)}}${{fmt(r.gvol)}}${{fmt(r.mvol)}}
-            </tr>`;
+    const hasStock = r => firms.some(f => r[f] > 0);
+    document.getElementById('stockTbody').innerHTML = rows.map(r => {{
+        if (!( r.code+r.name+r.yutai).toLowerCase().includes(q)) return '';
+        if (stockOnly && !hasStock(r)) return '';
+        const vols = firms.map(f => r[f] > 0
+            ? `<td><span class="stock-val">${{r[f].toLocaleString()}}</span></td>`
+            : `<td><span class="zero-val">-</span></td>`).join('');
+        return `<tr class="${{gyakuClass(r.gyaku)}}">
+            <td><span class="code-badge">${{r.code}}</span></td>
+            <td><strong>${{r.name}}</strong><br>
+                <small class="yutai-text">${{r.yutai}}</small><br>
+                <small class="kenri-text">権利日: ${{r.kenri}} ${{daysUntil(r.kenri)}}</small></td>
+            <td><span class="gyaku-val">${{r.gyaku}}日</span></td>
+            ${{vols}}</tr>`;
     }}).join('');
 }}
 
-renderTable();
+function renderKokuzetsu() {{
+    const month = currentKMonth;
+    const stocks = allData.filter(r => r.month === month);
+    document.getElementById('kokuzetsuTbody').innerHTML = stocks.map(r => {{
+        const key = `${{month}}_${{r.code}}`;
+        const k   = kokuzetsu[key] || {{}};
+        const kf  = k.firms || {{}};
+        const hasK = firms.some(f => kf[f]);
+        if (!hasK) return '';
+        const cells = firms.map(f => {{
+            if (kf[f])   return `<td class="ng-val">~${{kf[f]}}枯渇</td>`;
+            if (r[f] > 0) return `<td class="ok-val">✅在庫あり</td>`;
+            return `<td class="zero-val">-</td>`;
+        }}).join('');
+        return `<tr>
+            <td><span class="code-badge">${{r.code}}</span></td>
+            <td><strong>${{r.name}}</strong></td>
+            ${{cells}}</tr>`;
+    }}).join('');
+}}
 
-document.getElementById('search').addEventListener('input', renderTable);
-document.getElementById('stockOnly').addEventListener('change', renderTable);
+function renderTweet() {{
+    const month  = currentTweetMonth;
+    const stocks = allData.filter(r => r.month === month);
+    const hasStock = r => firms.some(f => r[f] > 0);
 
-document.querySelectorAll('.data-table thead th').forEach((th, colIndex) => {{
+    // ツイート①：完全枯渇
+    const dead = stocks.filter(r => {{
+        const key = `${{month}}_${{r.code}}`;
+        const kf  = (kokuzetsu[key] || {{}}).firms || {{}};
+        return !hasStock(r) && firms.some(f => kf[f]);
+    }});
+    let t1 = `◇ ${{month}}月末権利【枯渇日】\n\n`;
+    dead.forEach(r => {{
+        const key  = `${{month}}_${{r.code}}`;
+        const kf   = (kokuzetsu[key] || {{}}).firms || {{}};
+        const dates = firms.map(f => kf[f]).filter(Boolean).sort();
+        const last  = dates[dates.length-1];
+        t1 += `${{r.code}} ${{r.name}} ~${{last}}\n`;
+    }});
+    document.getElementById('tweet1').textContent = t1 || '（まだデータがありません）';
+
+    // ツイート②：一部在庫あり
+    const partial = stocks.filter(r => {{
+        const key = `${{month}}_${{r.code}}`;
+        const kf  = (kokuzetsu[key] || {{}}).firms || {{}};
+        return hasStock(r) && firms.some(f => kf[f]);
+    }});
+    let t2 = `◇ ${{month}}月末 まだ建てられる銘柄\n\n`;
+    partial.forEach(r => {{
+        const key   = `${{month}}_${{r.code}}`;
+        const kf    = (kokuzetsu[key] || {{}}).firms || {{}};
+        const okList = firms.map((f,i) => r[f]>0 ? `✅${{firmNames[f]}}` : null).filter(Boolean);
+        const ngList = firms.map((f,i) => kf[f]   ? `${{firmNames[f]}}~${{kf[f]}}` : null).filter(Boolean);
+        t2 += `${{r.code}} ${{r.name}}\n${{okList.join(' ')}} ${{ngList.join(' ')}}\n\n`;
+    }});
+    document.getElementById('tweet2').textContent = t2 || '（まだデータがありません）';
+}}
+
+// 初期描画
+renderStock();
+renderKokuzetsu();
+renderTweet();
+
+// 検索・フィルター
+document.getElementById('search').addEventListener('input', renderStock);
+document.getElementById('stockOnly').addEventListener('change', renderStock);
+
+// ソート
+document.querySelectorAll('#stockTable thead th').forEach((th, colIndex) => {{
     th.addEventListener('click', () => {{
         sortAsc = (sortCol === colIndex) ? !sortAsc : false;
         sortCol = colIndex;
-        document.querySelectorAll('.data-table thead th').forEach(t => t.textContent = t.dataset.label);
+        document.querySelectorAll('#stockTable thead th').forEach(t => t.textContent = t.dataset.label);
         th.textContent = th.dataset.label + (sortAsc ? ' ▲' : ' ▼');
-        renderTable();
+        renderStock();
     }});
 }});
+
+// メインタブ切り替え
+document.querySelectorAll('.tab-btn').forEach(tab => {{
+    tab.addEventListener('click', () => {{
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    }});
+}});
+
+function copyText(id) {{
+    navigator.clipboard.writeText(document.getElementById(id).textContent)
+        .then(() => alert('コピーしました！'));
+}}
 </script>
 </body>
 </html>"""
