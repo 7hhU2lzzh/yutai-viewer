@@ -34,14 +34,15 @@ REFERER_MAP = {
 def fmt_vol(v):
     if not v or str(v) in ["0", "-", "None", ""]:
         return '<td class="text-center" data-value="0"><span class="zero-val">-</span></td>'
-    return f'<td class="text-center" data-value="{v}"><span class="stock-val">{v}</span></td>'
+    num = int(v)
+    return f'<td class="text-center" data-value="{num}"><span class="stock-val">{num:,}</span></td>'
 
 def gyaku_class(days):
     try:
         d = int(days)
-        if d >= 5: return "table-danger"
-        if d >= 3: return "table-warning"
-        if d >= 1: return "table-success"
+        if d >= 5: return "row-danger"
+        if d >= 3: return "row-warning"
+        if d >= 1: return "row-success"
     except:
         pass
     return ""
@@ -58,11 +59,11 @@ def days_until(kenri_date_str):
             target = datetime(now.year + 1, month, day)
         diff = (target - now).days
         if diff <= 7:
-            return f'<span class="badge bg-danger">あと{diff}日</span>'
+            return f'<span class="badge-days danger">あと{diff}日</span>'
         elif diff <= 30:
-            return f'<span class="badge bg-warning text-dark">あと{diff}日</span>'
+            return f'<span class="badge-days warning">あと{diff}日</span>'
         else:
-            return f'<span class="text-muted small">あと{diff}日</span>'
+            return f'<span class="badge-days normal">あと{diff}日</span>'
     except:
         return ""
 
@@ -115,13 +116,15 @@ def main():
 
         rows_by_month[m] += f"""
             <tr class="{gc} {stock_flag}">
-                <td data-value="0"><span class="badge border text-dark">{r.get('code','')}</span></td>
+                <td data-value="0"><span class="code-badge">{r.get('code','')}</span></td>
                 <td data-value="0">
                     <strong>{r.get('name','')}</strong><br>
-                    <small class="text-muted">{r.get('yutai','')}</small><br>
-                    <small>権利日: {kenri} {countdown}</small>
+                    <small class="yutai-text">{r.get('yutai','')}</small><br>
+                    <small class="kenri-text">権利日: {kenri} {countdown}</small>
                 </td>
-                <td class="text-center small" data-value="{r.get('gyaku_days','0')}">逆日歩<br><strong>{r.get('gyaku_days','0')}日</strong></td>
+                <td class="text-center" data-value="{r.get('gyaku_days','0')}">
+                    <span class="gyaku-val">{r.get('gyaku_days','0')}日</span>
+                </td>
                 {fmt_vol(r.get('nvol'))}
                 {fmt_vol(r.get('kvol'))}
                 {fmt_vol(r.get('rvol'))}
@@ -135,27 +138,25 @@ def main():
     for m in range(1, 13):
         active  = "active" if m == current_month else ""
         display = "block"  if m == current_month else "none"
-        tabs_html += f'<li class="nav-item"><a class="nav-link {active}" href="#" data-month="{m}">{m}月</a></li>'
+        tabs_html += f'<a class="tab-btn {active}" href="#" data-month="{m}">{m}月</a>'
         panels_html += f"""
         <div id="month-{m}" class="month-panel" style="display:{display}">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 sortable-table">
-                    <thead class="table-light">
-                        <tr>
-                            <th data-label="コード">コード</th>
-                            <th data-label="銘柄名・優待">銘柄名・優待</th>
-                            <th class="text-center" data-label="逆日歩">逆日歩</th>
-                            <th class="text-center" data-label="日興">日興</th>
-                            <th class="text-center" data-label="カブコム">カブコム</th>
-                            <th class="text-center" data-label="楽天">楽天</th>
-                            <th class="text-center" data-label="SBI">SBI</th>
-                            <th class="text-center" data-label="GMO">GMO</th>
-                            <th class="text-center" data-label="松井">松井</th>
-                        </tr>
-                    </thead>
-                    <tbody>{rows_by_month[m]}</tbody>
-                </table>
-            </div>
+            <table class="data-table" id="tbl-{m}">
+                <thead>
+                    <tr>
+                        <th data-label="コード">コード</th>
+                        <th data-label="銘柄名・優待">銘柄名・優待</th>
+                        <th class="text-center" data-label="逆日歩">逆日歩</th>
+                        <th class="text-center" data-label="日興">日興</th>
+                        <th class="text-center" data-label="カブコム">カブコム</th>
+                        <th class="text-center" data-label="楽天">楽天</th>
+                        <th class="text-center" data-label="SBI">SBI</th>
+                        <th class="text-center" data-label="GMO">GMO</th>
+                        <th class="text-center" data-label="松井">松井</th>
+                    </tr>
+                </thead>
+                <tbody>{rows_by_month[m]}</tbody>
+            </table>
         </div>"""
 
     html = f"""<!DOCTYPE html>
@@ -164,49 +165,97 @@ def main():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>優待在庫ビューワー</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        body {{ background-color: #f0f2f5; }}
-        .stock-val {{ font-weight: bold; color: #dc3545; }}
-        .zero-val  {{ color: #adb5bd; }}
-        .nav-link  {{ color: #495057; }}
-        .nav-link.active {{ background: #0062E6 !important; color: white !important; border-radius: 6px; }}
-        th {{ cursor: pointer; user-select: none; white-space: nowrap; }}
-        th:hover {{ background-color: #e9ecef; }}
-        .no-stock {{ opacity: 0.4; }}
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+        body {{ background: #f7f6f2; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; font-size: 14px; color: #333; }}
+
+        /* ヘッダー */
+        .header {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }}
+        .header h1 {{ font-size: 18px; font-weight: 600; color: #333; }}
+        .update-badge {{ background: #f0ede6; color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }}
+
+        /* 検索バー */
+        .toolbar {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 12px 24px; display: flex; gap: 16px; align-items: center; }}
+        .search-input {{ flex: 1; border: 1px solid #e0ddd6; border-radius: 6px; padding: 8px 12px; font-size: 14px; outline: none; background: #faf9f7; }}
+        .search-input:focus {{ border-color: #aaa; background: #fff; }}
+        .toggle-label {{ display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; white-space: nowrap; cursor: pointer; }}
+        .toggle-input {{ width: 36px; height: 20px; cursor: pointer; }}
+
+        /* 月タブ */
+        .tabs {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }}
+        .tab-btn {{ display: inline-block; padding: 12px 14px; font-size: 13px; color: #888; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap; }}
+        .tab-btn:hover {{ color: #333; }}
+        .tab-btn.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
+
+        /* テーブル */
+        .table-wrap {{ overflow-x: auto; }}
+        .data-table {{ width: 100%; border-collapse: collapse; }}
+        .data-table thead th {{ background: #faf9f7; border-bottom: 1px solid #e8e6e0; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #888; text-align: center; cursor: pointer; user-select: none; white-space: nowrap; }}
+        .data-table thead th:first-child,
+        .data-table thead th:nth-child(2) {{ text-align: left; }}
+        .data-table thead th:hover {{ background: #f0ede6; color: #333; }}
+        .data-table tbody tr {{ border-bottom: 1px solid #f0ede6; }}
+        .data-table tbody tr:hover {{ background: #faf9f7; }}
+        .data-table tbody td {{ padding: 12px 16px; vertical-align: middle; }}
+
+        /* 行カラー */
+        .row-success {{ background: #f0f7f0; }}
+        .row-warning {{ background: #fffbf0; }}
+        .row-danger  {{ background: #fff5f5; }}
+
+        /* コードバッジ */
+        .code-badge {{ display: inline-block; border: 1px solid #e0ddd6; border-radius: 4px; padding: 2px 8px; font-size: 12px; color: #555; background: #faf9f7; }}
+
+        /* テキスト */
+        .yutai-text {{ color: #888; font-size: 12px; }}
+        .kenri-text {{ color: #aaa; font-size: 11px; }}
+        .gyaku-val  {{ font-size: 12px; color: #888; }}
+
+        /* 在庫数 */
+        .stock-val {{ font-weight: 600; color: #9b2335; }}
+        .zero-val  {{ color: #ccc; }}
+
+        /* カウントダウンバッジ */
+        .badge-days {{ display: inline-block; border-radius: 20px; padding: 1px 8px; font-size: 11px; margin-left: 4px; }}
+        .badge-days.danger  {{ background: #fde8e8; color: #9b2335; }}
+        .badge-days.warning {{ background: #fef3e0; color: #a06000; }}
+        .badge-days.normal  {{ background: #f0ede6; color: #888; }}
+
+        /* 非表示行 */
+        .no-stock {{ opacity: 0.35; }}
+
+        .text-center {{ text-align: center; }}
+
+        .container {{ max-width: 1300px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.06); }}
     </style>
 </head>
 <body>
-<div class="container mt-3" style="max-width:1300px">
-    <div class="card shadow-sm">
-        <div class="p-3 text-white" style="background:linear-gradient(135deg,#0062E6,#33AEFF);border-radius:8px 8px 0 0">
-            <h1 class="h5 mb-0">🎁 優待在庫ビューワー
-                <span class="badge bg-light text-primary float-end">更新: {update_time}</span>
-            </h1>
-        </div>
-        <div class="p-3 bg-white border-bottom d-flex gap-3 align-items-center">
-            <input type="text" id="search" class="form-control" placeholder="銘柄名・コードで検索...">
-            <div class="form-check form-switch mb-0 text-nowrap">
-                <input class="form-check-input" type="checkbox" id="stockOnly" checked>
-                <label class="form-check-label" for="stockOnly">在庫ありのみ</label>
-            </div>
-        </div>
-        <div class="px-3 pt-2 bg-white border-bottom">
-            <ul class="nav nav-pills gap-1 flex-wrap" id="monthTabs">
-                {tabs_html}
-            </ul>
-        </div>
-        <div class="bg-white">
-            {panels_html}
-        </div>
+<div class="container">
+    <div class="header">
+        <h1>🎁 優待在庫ビューワー</h1>
+        <span class="update-badge">更新: {update_time}</span>
+    </div>
+    <div class="toolbar">
+        <input type="text" id="search" class="search-input" placeholder="銘柄名・コードで検索...">
+        <label class="toggle-label">
+            <input type="checkbox" id="stockOnly" class="toggle-input" checked>
+            在庫ありのみ
+        </label>
+    </div>
+    <div class="tabs" id="monthTabs">
+        {tabs_html}
+    </div>
+    <div class="table-wrap">
+        {panels_html}
     </div>
 </div>
 
 <script>
-document.querySelectorAll('#monthTabs a').forEach(tab => {{
+// 月タブ切り替え
+document.querySelectorAll('.tab-btn').forEach(tab => {{
     tab.addEventListener('click', function(e) {{
         e.preventDefault();
-        document.querySelectorAll('#monthTabs a').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
         this.classList.add('active');
         document.querySelectorAll('.month-panel').forEach(p => p.style.display = 'none');
         document.getElementById('month-' + this.dataset.month).style.display = 'block';
@@ -214,6 +263,7 @@ document.querySelectorAll('#monthTabs a').forEach(tab => {{
     }});
 }});
 
+// フィルター
 function applyFilters() {{
     const q         = document.getElementById('search').value.toLowerCase();
     const stockOnly = document.getElementById('stockOnly').checked;
@@ -231,8 +281,9 @@ document.getElementById('search').addEventListener('input', applyFilters);
 document.getElementById('stockOnly').addEventListener('change', applyFilters);
 applyFilters();
 
+// ソート
 let sortState = {{}};
-document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => {{
+document.querySelectorAll('.data-table thead th').forEach((th, colIndex) => {{
     th.addEventListener('click', () => {{
         const table   = th.closest('table');
         const tableId = table.closest('.month-panel').id;
@@ -246,22 +297,19 @@ document.querySelectorAll('.sortable-table thead th').forEach((th, colIndex) => 
         const rows  = Array.from(tbody.querySelectorAll('tr'));
 
         rows.sort((a, b) => {{
-    // 非表示行は後ろに追いやる
-    const aVisible = a.style.display !== 'none';
-    const bVisible = b.style.display !== 'none';
-    if (aVisible && !bVisible) return -1;
-    if (!aVisible && bVisible) return 1;
-    
-    const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
-    const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
-    return state.asc ? aVal - bVal : bVal - aVal;
-}});
+            const aVisible = a.style.display !== 'none';
+            const bVisible = b.style.display !== 'none';
+            if (aVisible && !bVisible) return -1;
+            if (!aVisible && bVisible) return 1;
+            const aVal = parseInt(a.cells[colIndex]?.dataset.value || '0') || 0;
+            const bVal = parseInt(b.cells[colIndex]?.dataset.value || '0') || 0;
+            return state.asc ? aVal - bVal : bVal - aVal;
+        }});
 
         table.querySelectorAll('thead th').forEach(t => {{
             t.textContent = t.dataset.label;
         }});
         th.textContent = th.dataset.label + (state.asc ? ' ▲' : ' ▼');
-
         rows.forEach(r => tbody.appendChild(r));
     }});
 }});
