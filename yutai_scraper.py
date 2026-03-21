@@ -6,6 +6,7 @@ import crypt
 import json
 from io import BytesIO
 from datetime import datetime, timezone, timedelta
+
 JST = timezone(timedelta(hours=9))
 
 # --- 設定 ---
@@ -33,11 +34,174 @@ REFERER_MAP = {
     12: "https://gokigen-life.tokyo/201912yutai-all-list/",
 }
 
-FIRMS     = ['nvol', 'kvol', 'rvol', 'svol', 'gvol', 'mvol']
+FIRMS      = ['nvol', 'kvol', 'rvol', 'svol', 'gvol', 'mvol']
 FIRM_NAMES = {'nvol':'日興', 'kvol':'カブコム', 'rvol':'楽天', 'svol':'SBI', 'gvol':'GMO', 'mvol':'松井'}
 
+LOGIN_PHP = '''<?php
+session_start();
+if (isset($_SESSION['user'])) { header('Location: index.php'); exit; }
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = trim($_POST['id'] ?? '');
+    $pass = $_POST['pass'] ?? '';
+    $users = json_decode(file_get_contents(__DIR__ . '/users.json'), true) ?? [];
+    if (isset($users[$id]) && password_verify($pass, $users[$id]['password'])) {
+        $u = $users[$id];
+        if ($u['role'] !== 'admin' && !empty($u['expires'])) {
+            $exp = new DateTime($u['expires']);
+            if (new DateTime() > $exp) { $error = '閲覧期限が切れています。'; goto show; }
+        }
+        $_SESSION['user'] = $id;
+        $_SESSION['role'] = $u['role'];
+        header('Location: index.php'); exit;
+    }
+    $error = 'IDまたはパスワードが違います';
+}
+show:
+?><!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ログイン</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f7f6f2;font-family:-apple-system,sans-serif;font-size:14px;color:#333;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:12px;padding:40px;width:100%;max-width:360px}
+h1{font-size:20px;font-weight:600;margin-bottom:8px}
+.sub{font-size:13px;color:#888;margin-bottom:24px}
+.fg{margin-bottom:16px}
+label{font-size:12px;font-weight:600;color:#555;margin-bottom:6px;display:block}
+input{width:100%;border:1px solid #e0ddd6;border-radius:6px;padding:10px 12px;font-size:14px;outline:none}
+input:focus{border-color:#aaa}
+.btn{width:100%;background:#333;color:#fff;border:none;border-radius:6px;padding:12px;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{background:#555}
+.error{color:#9b2335;font-size:12px;margin-top:12px}
+</style></head>
+<body><div class="card">
+<h1>🎁 優待在庫ビューワー</h1>
+<p class="sub">ログインしてください</p>
+<form method="POST">
+<div class="fg"><label>ユーザーID</label><input type="text" name="id" autofocus></div>
+<div class="fg"><label>パスワード</label><input type="password" name="pass"></div>
+<button type="submit" class="btn">ログイン</button>
+<?php if($error): ?><p class="error"><?=htmlspecialchars($error)?></p><?php endif; ?>
+</form></div></body></html>
+'''
+
+LOGOUT_PHP = '''<?php
+session_start();
+session_destroy();
+header('Location: login.php');
+exit;
+'''
+
+ADMIN_PHP = '''<?php
+session_start();
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'admin') { header('Location: login.php'); exit; }
+$users_file = __DIR__ . '/users.json';
+$users = json_decode(file_get_contents($users_file), true) ?? [];
+$message = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+    if ($action === 'add') {
+        $id = trim($_POST['new_id'] ?? '');
+        $pass = $_POST['new_pass'] ?? '';
+        $role = $_POST['new_role'] ?? 'user';
+        $expires = $_POST['expires'] ?? '';
+        if ($id && $pass) {
+            $users[$id] = ['password'=>password_hash($pass,PASSWORD_DEFAULT),'role'=>$role,'expires'=>$expires?:null];
+            file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
+            $message = "✅ ユーザー「{$id}」を追加しました";
+        }
+    }
+    if ($action === 'delete') {
+        $did = $_POST['del_id'] ?? '';
+        if ($did && $did !== $_SESSION['user']) {
+            unset($users[$did]);
+            file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
+            $message = "🗑️ 削除しました";
+        }
+    }
+    if ($action === 'update_expires') {
+        $uid = $_POST['upd_id'] ?? '';
+        $expires = $_POST['expires'] ?? '';
+        if ($uid && isset($users[$uid])) {
+            $users[$uid]['expires'] = $expires ?: null;
+            file_put_contents($users_file, json_encode($users, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
+            $message = "✅ 期限を更新しました";
+        }
+    }
+}
+$now = new DateTime();
+?><!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ユーザー管理</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f7f6f2;font-family:-apple-system,sans-serif;font-size:14px;color:#333}
+.header{background:#fff;border-bottom:1px solid #e8e6e0;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.header h1{font-size:16px;font-weight:600}
+.btn-sm{border:1px solid #e0ddd6;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;background:#fff;color:#555;text-decoration:none;display:inline-block;margin-left:8px}
+.body{max-width:900px;margin:24px auto;padding:0 24px}
+.msg{background:#f0f7f0;border:1px solid #c0e0c0;border-radius:6px;padding:10px 16px;margin-bottom:16px;font-size:13px}
+.card{background:#fff;border:1px solid #e8e6e0;border-radius:8px;padding:24px;margin-bottom:24px}
+.card h2{font-size:14px;font-weight:600;margin-bottom:16px;color:#555}
+.form-row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.fg{display:flex;flex-direction:column;gap:4px}
+label{font-size:12px;font-weight:600;color:#555}
+input,select{border:1px solid #e0ddd6;border-radius:6px;padding:8px 12px;font-size:13px;outline:none}
+.btn-add{background:#333;color:#fff;border:none;border-radius:6px;padding:9px 16px;font-size:13px;cursor:pointer}
+.btn-danger{background:#fff;color:#9b2335;border:1px solid #f0c0c0;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer}
+table{width:100%;border-collapse:collapse}
+th{background:#faf9f7;border-bottom:1px solid #e8e6e0;padding:8px 12px;font-size:12px;font-weight:600;color:#888;text-align:left}
+td{padding:10px 12px;border-bottom:1px solid #f0ede6;font-size:13px}
+.ra{background:#333;color:#fff;border-radius:4px;padding:2px 8px;font-size:11px}
+.ru{background:#f0ede6;color:#555;border-radius:4px;padding:2px 8px;font-size:11px}
+.expired{color:#9b2335}
+.valid{color:#2d7a2d}
+</style></head>
+<body>
+<div class="header"><h1>⚙️ ユーザー管理</h1>
+<div><a href="index.php" class="btn-sm">ビューワーへ</a><a href="logout.php" class="btn-sm">ログアウト</a></div></div>
+<div class="body">
+<?php if($message): ?><div class="msg"><?=htmlspecialchars($message)?></div><?php endif; ?>
+<div class="card"><h2>＋ ユーザー追加</h2>
+<form method="POST"><input type="hidden" name="action" value="add">
+<div class="form-row">
+<div class="fg"><label>ID</label><input type="text" name="new_id" required></div>
+<div class="fg"><label>パスワード</label><input type="password" name="new_pass" required></div>
+<div class="fg"><label>権限</label><select name="new_role"><option value="user">一般</option><option value="admin">管理者</option></select></div>
+<div class="fg"><label>閲覧期限</label><input type="date" name="expires"></div>
+<div class="fg"><label>&nbsp;</label><button type="submit" class="btn-add">追加</button></div>
+</div></form></div>
+<div class="card"><h2>ユーザー一覧</h2>
+<table><thead><tr><th>ID</th><th>権限</th><th>閲覧期限</th><th>期限変更</th><th>操作</th></tr></thead>
+<tbody>
+<?php foreach($users as $uid=>$u): ?>
+<?php $exp_dt = (!empty($u['expires'])) ? new DateTime($u['expires']) : null; $expired = $exp_dt && $now > $exp_dt; ?>
+<tr>
+<td><strong><?=htmlspecialchars($uid)?></strong></td>
+<td><?=$u['role']==='admin'?'<span class="ra">管理者</span>':'<span class="ru">一般</span>'?></td>
+<td><?php if(!$exp_dt): ?><span style="color:#aaa">無期限</span>
+<?php elseif($expired): ?><span class="expired">⚠️ <?=htmlspecialchars($u['expires'])?> 期限切れ</span>
+<?php else: ?><span class="valid"><?=htmlspecialchars($u['expires'])?></span><?php endif; ?></td>
+<td><?php if($u['role']!=='admin'): ?>
+<form method="POST" style="display:flex;gap:8px;align-items:center;">
+<input type="hidden" name="action" value="update_expires">
+<input type="hidden" name="upd_id" value="<?=htmlspecialchars($uid)?>">
+<input type="date" name="expires" value="<?=htmlspecialchars($u['expires']??'')?>" style="padding:4px 8px;font-size:12px">
+<button type="submit" class="btn-sm">更新</button></form>
+<?php else: ?><span style="color:#aaa">-</span><?php endif; ?></td>
+<td><?php if($uid!==$_SESSION['user']): ?>
+<form method="POST" onsubmit="return confirm('削除しますか？')">
+<input type="hidden" name="action" value="delete">
+<input type="hidden" name="del_id" value="<?=htmlspecialchars($uid)?>">
+<button type="submit" class="btn-danger">削除</button></form>
+<?php else: ?><span style="color:#aaa">-</span><?php endif; ?></td>
+</tr><?php endforeach; ?>
+</tbody></table></div></div></body></html>
+'''
+
 def main():
-    now = datetime.now(JST)
+    now          = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
@@ -95,19 +259,16 @@ def main():
     # --- 枯渇検出 ---
     print("🔍 枯渇検出中...")
     for r in all_data:
-        code     = r["code"]
-        month    = r["month"]
-        # 権利年の判定：権利月が現在月より前なら翌年の権利
-        kenri_year = current_year
-        key      = f"{kenri_year}_{month}_{code}"
-        prev_key = f"{month}_{code}"
-        prev     = prev_data.get(prev_key, {})
+        code  = r["code"]
+        month = r["month"]
+        key   = f"{current_year}_{month}_{code}"
+        prev  = prev_data.get(f"{month}_{code}", {})
 
         if key not in kokuzetsu:
             kokuzetsu[key] = {
                 "code":        code,
                 "name":        r["name"],
-                "kenri_year":  kenri_year,
+                "kenri_year":  current_year,
                 "kenri_month": month,
                 "firms":       {}
             }
@@ -134,378 +295,64 @@ def main():
 
     print("✅ kokuzetsu.json 更新完了")
 
-    # --- HTML生成 ---
-    data_json      = json.dumps(all_data,  ensure_ascii=False)
-    kokuzetsu_json = json.dumps(kokuzetsu, ensure_ascii=False)
+    # --- users.json が存在しなければ初期ファイルを作成 ---
+    if not os.path.exists("users.json"):
+        initial_users = {
+            "admin": {
+                "password": "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
+                "role": "admin",
+                "expires": None
+            }
+        }
+        with open("users.json", "w", encoding="utf-8") as f:
+            json.dump(initial_users, f, ensure_ascii=False, indent=2)
 
-    html = f"""<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>優待在庫ビューワー</title>
-    <style>
-        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-        body {{ background: #f7f6f2; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; font-size: 14px; color: #333; }}
-        .header {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }}
-        .header h1 {{ font-size: 18px; font-weight: 600; }}
-        .update-badge {{ background: #f0ede6; color: #888; font-size: 12px; padding: 4px 10px; border-radius: 20px; }}
-        .toolbar {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 12px 24px; display: flex; gap: 16px; align-items: center; }}
-        .search-input {{ flex: 1; border: 1px solid #e0ddd6; border-radius: 6px; padding: 8px 12px; font-size: 14px; outline: none; background: #faf9f7; }}
-        .search-input:focus {{ border-color: #aaa; background: #fff; }}
-        .toggle-label {{ display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666; white-space: nowrap; cursor: pointer; }}
-        .main-tabs {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; }}
-        .main-tab {{ padding: 12px 16px; font-size: 13px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }}
-        .main-tab:hover {{ color: #333; }}
-        .main-tab.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
-        .sub-tabs {{ background: #faf9f7; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }}
-        .sub-tab {{ padding: 8px 12px; font-size: 12px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }}
-        .sub-tab:hover {{ color: #333; }}
-        .sub-tab.active {{ color: #333; border-bottom-color: #555; font-weight: 600; }}
-        .panel {{ display: none; }}
-        .panel.active {{ display: block; }}
-        .table-wrap {{ overflow-x: auto; }}
-        .data-table {{ width: 100%; border-collapse: collapse; }}
-        .data-table thead th {{ background: #faf9f7; border-bottom: 1px solid #e8e6e0; padding: 10px 16px; font-size: 12px; font-weight: 600; color: #888; text-align: center; cursor: pointer; user-select: none; white-space: nowrap; }}
-        .data-table thead th:first-child, .data-table thead th:nth-child(2) {{ text-align: left; }}
-        .data-table thead th:hover {{ background: #f0ede6; color: #333; }}
-        .data-table tbody tr {{ border-bottom: 1px solid #f0ede6; }}
-        .data-table tbody tr:hover {{ background: #faf9f7; }}
-        .data-table tbody td {{ padding: 12px 16px; vertical-align: middle; text-align: center; }}
-        .data-table tbody td:first-child, .data-table tbody td:nth-child(2) {{ text-align: left; }}
-        .row-success {{ background: #f0f7f0; }}
-        .row-warning {{ background: #fffbf0; }}
-        .row-danger  {{ background: #fff5f5; }}
-        .code-badge {{ display: inline-block; border: 1px solid #e0ddd6; border-radius: 4px; padding: 2px 8px; font-size: 12px; color: #555; background: #faf9f7; }}
-        .yutai-text {{ color: #888; font-size: 12px; }}
-        .kenri-text {{ color: #aaa; font-size: 11px; }}
-        .gyaku-val  {{ font-size: 12px; color: #888; }}
-        .stock-val {{ font-weight: 600; color: #9b2335; }}
-        .zero-val  {{ color: #ccc; }}
-        .ok-val {{ color: #2d7a2d; font-weight: 600; font-size: 12px; }}
-        .ng-val {{ color: #9b2335; font-size: 12px; }}
-        .badge-days {{ display: inline-block; border-radius: 20px; padding: 1px 8px; font-size: 11px; margin-left: 4px; }}
-        .badge-days.danger  {{ background: #fde8e8; color: #9b2335; }}
-        .badge-days.warning {{ background: #fef3e0; color: #a06000; }}
-        .badge-days.normal  {{ background: #f0ede6; color: #888; }}
-        .tweet-box {{ background: #f7f6f2; border: 1px solid #e0ddd6; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.8; white-space: pre-wrap; font-family: monospace; margin: 16px 24px; }}
-        .copy-btn {{ margin: 0 24px 16px; border: 1px solid #e0ddd6; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; background: #fff; color: #555; }}
-        .copy-btn:hover {{ background: #f0ede6; }}
-        .section-title {{ padding: 16px 24px 8px; font-size: 13px; font-weight: 600; color: #555; }}
-        .year-tabs {{ background: #fff; border-bottom: 1px solid #e8e6e0; padding: 0 24px; display: flex; gap: 4px; }}
-        .year-tab {{ padding: 10px 14px; font-size: 13px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; }}
-        .year-tab:hover {{ color: #333; }}
-        .year-tab.active {{ color: #333; border-bottom-color: #333; font-weight: 600; }}
-        .container {{ max-width: 1300px; margin: 0 auto; background: #fff; min-height: 100vh; box-shadow: 0 0 40px rgba(0,0,0,0.06); }}
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="header">
-        <h1>🎁 優待在庫ビューワー</h1>
-        <span class="update-badge">更新: {update_time}</span>
-    </div>
+    # --- stock_data.json を生成 ---
+    stock_data = {
+        "update_time": update_time,
+        "data": all_data
+    }
+    with open("stock_data.json", "w", encoding="utf-8") as f:
+        json.dump(stock_data, f, ensure_ascii=False)
 
-    <!-- メインタブ -->
-    <div class="main-tabs">
-        <div class="main-tab active" data-tab="zaiko">在庫状況</div>
-        <div class="main-tab" data-tab="kokuzetsu">枯渇情報</div>
-        <div class="main-tab" data-tab="tweet">ツイート原稿</div>
-    </div>
+    with open("kokuzetsu_data.json", "w", encoding="utf-8") as f:
+        json.dump(kokuzetsu, f, ensure_ascii=False)
 
-    <!-- 在庫状況 -->
-    <div id="zaiko" class="panel active">
-        <div class="toolbar">
-            <input type="text" id="search" class="search-input" placeholder="銘柄名・コードで検索...">
-            <label class="toggle-label">
-                <input type="checkbox" id="stockOnly" checked>在庫ありのみ
-            </label>
-        </div>
-        <div class="sub-tabs" id="monthTabs"></div>
-        <div class="table-wrap">
-            <table class="data-table" id="stockTable">
-                <thead><tr>
-                    <th data-label="コード">コード</th>
-                    <th data-label="銘柄名・優待">銘柄名・優待</th>
-                    <th data-label="逆日歩">逆日歩</th>
-                    <th data-label="日興">日興</th>
-                    <th data-label="カブコム">カブコム</th>
-                    <th data-label="楽天">楽天</th>
-                    <th data-label="SBI">SBI</th>
-                    <th data-label="GMO">GMO</th>
-                    <th data-label="松井">松井</th>
-                </tr></thead>
-                <tbody id="stockTbody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 枯渇情報 -->
-    <div id="kokuzetsu" class="panel">
-        <div class="year-tabs" id="kokuzetsuYearTabs"></div>
-        <div class="sub-tabs" id="kokuzetsuMonthTabs"></div>
-        <div class="table-wrap">
-            <table class="data-table">
-                <thead><tr>
-                    <th>コード</th><th>銘柄名</th>
-                    <th>日興</th><th>カブコム</th><th>楽天</th><th>SBI</th><th>GMO</th><th>松井</th>
-                </tr></thead>
-                <tbody id="kokuzetsuTbody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- ツイート原稿 -->
-    <div id="tweet" class="panel">
-        <div class="year-tabs" id="tweetYearTabs"></div>
-        <div class="sub-tabs" id="tweetMonthTabs"></div>
-        <div class="section-title">📋 ツイート原稿①：完全枯渇リスト（来年用）</div>
-        <div class="tweet-box" id="tweet1"></div>
-        <button class="copy-btn" onclick="copyText('tweet1')">コピー</button>
-        <div class="section-title">📋 ツイート原稿②：まだ建てられる銘柄（リアルタイム）</div>
-        <div class="tweet-box" id="tweet2"></div>
-        <button class="copy-btn" onclick="copyText('tweet2')">コピー</button>
-    </div>
-</div>
-
-<script>
-const allData   = {data_json};
-const kokuzetsu = {kokuzetsu_json};
-const firms     = ['nvol','kvol','rvol','svol','gvol','mvol'];
-const firmNames = {{'nvol':'日興','kvol':'カブコム','rvol':'楽天','svol':'SBI','gvol':'GMO','mvol':'松井'}};
-
-let currentMonth  = {now.month};
-let currentYear   = {now.year};
-let currentKYear  = {now.year};
-let currentKMonth = {now.month};
-let currentTYear  = {now.year};
-let currentTMonth = {now.month};
-let sortCol = -1;
-let sortAsc = true;
-
-// 年一覧をkokuzetsuから取得
-function getYears() {{
-    const years = [...new Set(Object.values(kokuzetsu).map(v => v.kenri_year))].sort((a,b) => b-a);
-    return years.length ? years : [{now.year}];
-}}
-
-// 月タブ生成
-function buildMonthTabs(containerId, activeMonth, onClick) {{
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    for (let m = 1; m <= 12; m++) {{
-        const a = document.createElement('a');
-        a.className   = 'sub-tab' + (m === activeMonth ? ' active' : '');
-        a.textContent = m + '月';
-        a.addEventListener('click', () => {{
-            container.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-            a.classList.add('active');
-            onClick(m);
-        }});
-        container.appendChild(a);
-    }}
-}}
-
-// 年タブ生成
-function buildYearTabs(containerId, activeYear, onClick) {{
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    getYears().forEach(y => {{
-        const a = document.createElement('a');
-        a.className   = 'year-tab' + (y === activeYear ? ' active' : '');
-        a.textContent = y + '年';
-        a.addEventListener('click', () => {{
-            container.querySelectorAll('.year-tab').forEach(t => t.classList.remove('active'));
-            a.classList.add('active');
-            onClick(y);
-        }});
-        container.appendChild(a);
-    }});
-}}
-
-// 在庫状況タブ
-buildMonthTabs('monthTabs', currentMonth, m => {{
-    currentMonth = m;
-    sortCol = -1; sortAsc = true;
-    document.querySelectorAll('#stockTable thead th').forEach(t => t.textContent = t.dataset.label);
-    renderStock();
-}});
-
-// 枯渇情報タブ
-buildYearTabs('kokuzetsuYearTabs', currentKYear, y => {{
-    currentKYear = y;
-    buildMonthTabs('kokuzetsuMonthTabs', currentKMonth, m => {{ currentKMonth = m; renderKokuzetsu(); }});
-    renderKokuzetsu();
-}});
-buildMonthTabs('kokuzetsuMonthTabs', currentKMonth, m => {{ currentKMonth = m; renderKokuzetsu(); }});
-
-// ツイート原稿タブ
-buildYearTabs('tweetYearTabs', currentTYear, y => {{
-    currentTYear = y;
-    buildMonthTabs('tweetMonthTabs', currentTMonth, m => {{ currentTMonth = m; renderTweet(); }});
-    renderTweet();
-}});
-buildMonthTabs('tweetMonthTabs', currentTMonth, m => {{ currentTMonth = m; renderTweet(); }});
-
-function gyakuClass(d) {{
-    if (d >= 5) return 'row-danger';
-    if (d >= 3) return 'row-warning';
-    if (d >= 1) return 'row-success';
-    return '';
-}}
-
-function daysUntil(kenri) {{
-    if (!kenri) return '';
-    try {{
-        const now   = new Date();
-        const parts = kenri.match(/(\d+)月(\d+)日/);
-        if (!parts) return '';
-        let target = new Date(now.getFullYear(), parseInt(parts[1])-1, parseInt(parts[2]));
-        if (target < now) target.setFullYear(now.getFullYear()+1);
-        const diff = Math.ceil((target - now) / 86400000);
-        if (diff <= 7)  return `<span class="badge-days danger">あと${{diff}}日</span>`;
-        if (diff <= 30) return `<span class="badge-days warning">あと${{diff}}日</span>`;
-        return `<span class="badge-days normal">あと${{diff}}日</span>`;
-    }} catch(e) {{ return ''; }}
-}}
-
-function renderStock() {{
-    const q         = document.getElementById('search').value.toLowerCase();
-    const stockOnly = document.getElementById('stockOnly').checked;
-    let rows = allData.filter(r => r.month === currentMonth);
-    if (sortCol >= 0) {{
-        const keys = ['code','name','gyaku','nvol','kvol','rvol','svol','gvol','mvol'];
-        const key  = keys[sortCol];
-        rows.sort((a,b) => {{
-            const av = typeof a[key]==='number' ? a[key] : 0;
-            const bv = typeof b[key]==='number' ? b[key] : 0;
-            return sortAsc ? av-bv : bv-av;
-        }});
-    }}
-    const hasStock = r => firms.some(f => r[f] > 0);
-    document.getElementById('stockTbody').innerHTML = rows.map(r => {{
-        if (!(r.code+r.name+r.yutai).toLowerCase().includes(q)) return '';
-        if (stockOnly && !hasStock(r)) return '';
-        const vols = firms.map(f => r[f] > 0
-            ? `<td><span class="stock-val">${{r[f].toLocaleString()}}</span></td>`
-            : `<td><span class="zero-val">-</span></td>`).join('');
-        return `<tr class="${{gyakuClass(r.gyaku)}}">
-            <td><span class="code-badge">${{r.code}}</span></td>
-            <td><strong>${{r.name}}</strong><br>
-                <small class="yutai-text">${{r.yutai}}</small><br>
-                <small class="kenri-text">権利日: ${{r.kenri}} ${{daysUntil(r.kenri)}}</small></td>
-            <td><span class="gyaku-val">${{r.gyaku}}日</span></td>
-            ${{vols}}</tr>`;
-    }}).join('');
-}}
-
-function renderKokuzetsu() {{
-    const stocks = allData.filter(r => r.month === currentKMonth);
-    document.getElementById('kokuzetsuTbody').innerHTML = stocks.map(r => {{
-        const key = `${{currentKYear}}_${{currentKMonth}}_${{r.code}}`;
-        const k   = kokuzetsu[key] || {{}};
-        const kf  = k.firms || {{}};
-        const hasK = firms.some(f => kf[f]);
-        if (!hasK) return '';
-        const cells = firms.map(f => {{
-            if (kf[f])    return `<td class="ng-val">~${{kf[f]}}</td>`;
-            if (r[f] > 0) return `<td class="ok-val">✅在庫あり</td>`;
-            return `<td class="zero-val">-</td>`;
-        }}).join('');
-        return `<tr>
-            <td><span class="code-badge">${{r.code}}</span></td>
-            <td><strong>${{r.name}}</strong></td>
-            ${{cells}}</tr>`;
-    }}).join('');
-}}
-
-function renderTweet() {{
-    const stocks   = allData.filter(r => r.month === currentTMonth);
-    const hasStock = r => firms.some(f => r[f] > 0);
-
-    const dead = stocks.filter(r => {{
-        const key = `${{currentTYear}}_${{currentTMonth}}_${{r.code}}`;
-        const kf  = (kokuzetsu[key] || {{}}).firms || {{}};
-        return !hasStock(r) && firms.some(f => kf[f]);
-    }});
-    let t1 = `◇ ${{currentTYear}}年${{currentTMonth}}月末権利【枯渇日】\n\n`;
-    dead.forEach(r => {{
-        const key  = `${{currentTYear}}_${{currentTMonth}}_${{r.code}}`;
-        const kf   = (kokuzetsu[key] || {{}}).firms || {{}};
-        const dates = firms.map(f => kf[f]).filter(Boolean).sort();
-        t1 += `${{r.code}} ${{r.name}} ~${{dates[dates.length-1]}}\n`;
-    }});
-    document.getElementById('tweet1').textContent = t1 || '（まだデータがありません）';
-
-    const partial = stocks.filter(r => {{
-        const key = `${{currentTYear}}_${{currentTMonth}}_${{r.code}}`;
-        const kf  = (kokuzetsu[key] || {{}}).firms || {{}};
-        return hasStock(r) && firms.some(f => kf[f]);
-    }});
-    let t2 = `◇ ${{currentTYear}}年${{currentTMonth}}月末 まだ建てられる銘柄\n\n`;
-    partial.forEach(r => {{
-        const key    = `${{currentTYear}}_${{currentTMonth}}_${{r.code}}`;
-        const kf     = (kokuzetsu[key] || {{}}).firms || {{}};
-        const okList = firms.map((f,i) => r[f]>0 ? `✅${{firmNames[f]}}` : null).filter(Boolean);
-        const ngList = firms.map((f,i) => kf[f]   ? `${{firmNames[f]}}~${{kf[f]}}` : null).filter(Boolean);
-        t2 += `${{r.code}} ${{r.name}}\n${{okList.join(' ')}} ${{ngList.join(' ')}}\n\n`;
-    }});
-    document.getElementById('tweet2').textContent = t2 || '（まだデータがありません）';
-}}
-
-// 初期描画
-renderStock();
-renderKokuzetsu();
-renderTweet();
-
-// 検索・フィルター
-document.getElementById('search').addEventListener('input', renderStock);
-document.getElementById('stockOnly').addEventListener('change', renderStock);
-
-// ソート
-document.querySelectorAll('#stockTable thead th').forEach((th, colIndex) => {{
-    th.addEventListener('click', () => {{
-        sortAsc = (sortCol === colIndex) ? !sortAsc : false;
-        sortCol = colIndex;
-        document.querySelectorAll('#stockTable thead th').forEach(t => t.textContent = t.dataset.label);
-        th.textContent = th.dataset.label + (sortAsc ? ' ▲' : ' ▼');
-        renderStock();
-    }});
-}});
-
-// メインタブ切り替え
-document.querySelectorAll('.main-tab').forEach(tab => {{
-    tab.addEventListener('click', () => {{
-        document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-    }});
-}});
-
-function copyText(id) {{
-    navigator.clipboard.writeText(document.getElementById(id).textContent)
-        .then(() => alert('コピーしました！'));
-}}
-</script>
-</body>
-</html>"""
-
-    hashed   = crypt.crypt(BASIC_PASS, crypt.mksalt(crypt.METHOD_SHA512))
-    htpasswd = f"{BASIC_USER}:{hashed}\n"
-    htaccess = """AuthType Basic
-AuthName "Private Area"
-AuthUserFile /home/seiheki/www/.htpasswd
-Require valid-user
+    # --- .htaccess ---
+    htaccess = """# JSONファイルへの直接アクセスを禁止
+<Files "*.json">
+    Deny from all
+</Files>
 """
 
+    # --- FTP転送 ---
     print("📡 FTP転送中...")
     try:
         with ftplib.FTP(FTP_HOST, FTP_USER, FTP_PASS) as ftp:
             ftp.cwd(FTP_DIR)
-            ftp.storbinary("STOR index.html", BytesIO(html.encode('utf-8')))
-            ftp.storbinary("STOR .htpasswd",  BytesIO(htpasswd.encode('utf-8')))
-            ftp.storbinary("STOR .htaccess",  BytesIO(htaccess.encode('utf-8')))
+
+            # PHPファイル
+            ftp.storbinary("STOR login.php",  BytesIO(LOGIN_PHP.encode('utf-8')))
+            ftp.storbinary("STOR logout.php", BytesIO(LOGOUT_PHP.encode('utf-8')))
+            ftp.storbinary("STOR admin.php",  BytesIO(ADMIN_PHP.encode('utf-8')))
+
+            # データJSON
+            ftp.storbinary("STOR stock_data.json",    BytesIO(json.dumps(stock_data, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR kokuzetsu_data.json", BytesIO(json.dumps(kokuzetsu, ensure_ascii=False).encode('utf-8')))
+
+            # users.jsonはサーバー上に既にある場合は上書きしない
+            try:
+                ftp.size("users.json")
+                print("  users.json は既存のためスキップ")
+            except:
+                with open("users.json", "rb") as f:
+                    ftp.storbinary("STOR users.json", f)
+                print("  users.json を初期作成")
+
+            # .htaccess
+            ftp.storbinary("STOR .htaccess", BytesIO(htaccess.encode('utf-8')))
+
+            # index.phpはGitHubから別途アップ（手動で1回だけ）
             print("✅ 完了！")
     except Exception as e:
         print(f"❌ FTPエラー: {e}")
