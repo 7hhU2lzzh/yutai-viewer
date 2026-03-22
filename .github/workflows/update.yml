@@ -28,6 +28,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add kokuzetsu.json prev.json
-          git diff --staged --quiet || git commit -m "Update kokuzetsu.json"
+          git add kokuzetsu.json prev.json name_cache.json
+          git diff --staged --quiet || git commit -m "Update kokuzetsu.json / name_cache.json"
           git push
