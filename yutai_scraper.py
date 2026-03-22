@@ -1,3 +1,4 @@
+import re
 import requests
 import time
 import os
@@ -188,7 +189,8 @@ td{padding:10px 12px;border-bottom:1px solid #f0ede6;font-size:13px}
   <li>端の編集権限は管理者のみ（一般ユーザーは表示のみ）</li>
   <li>初期パスワードは <code>password</code> → ログイン後すぐ変更推奨</li>
   <li>GitHub Actionsが <code>hashi_api.php</code> を自動FTP転送する</li>
-  <li><code>users.json</code> / <code>hashi_data.json</code> はサーバー上で保護（.htaccess）</li>
+  <li><code>users.json</code> / <code>prev.json</code> / <code>kokuzetsu.json</code> はサーバー上で保護（.htaccess）</li>
+  <li><code>hashi_data.json</code> はJSから直接読むため .htaccess で許可済み</li>
 </ul>
 </div>
 <?php if($message): ?><div class="msg"><?=htmlspecialchars($message)?></div><?php endif; ?>
@@ -233,31 +235,104 @@ td{padding:10px 12px;border-bottom:1px solid #f0ede6;font-size:13px}
 HASHI_API_PHP = '''<?php
 session_start();
 if (!isset($_SESSION['user'])) { http_response_code(401); exit; }
+if ($_SESSION['role'] !== 'admin') { http_response_code(403); exit; }
 
 $file = __DIR__ . '/hashi_data.json';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit; }
 
-$body = json_decode(file_get_contents('php://input'), true);
-$key  = preg_replace('/[^a-zA-Z0-9_\\-]/', '', $body['key'] ?? '');
-$val  = $body['value'] ?? '';
+header('Content-Type: application/json; charset=utf-8');
 
-$allowed = ['', '端のみ', '端+空', '本+端+本', '本+端+空+本', '不明(調査中)'];
-if (!$key || !in_array($val, $allowed, true)) { http_response_code(400); exit; }
+// $_POST を優先（FormData送信の場合）、なければJSON bodyを読む
+if (!empty($_POST)) {
+    $body = $_POST;
+} else {
+    $raw  = file_get_contents('php://input');
+    $body = json_decode($raw, true) ?? [];
+}
+
+$key = preg_replace('/[^a-zA-Z0-9_\\-]/', '', $body['key'] ?? '');
+$val = $body['value'] ?? '';
+
+// キーが空、または値が長すぎる場合のみ拒否（自由入力対応のため許可リスト廃止）
+if (!$key || mb_strlen($val, 'UTF-8') > 50) {
+    http_response_code(400);
+    echo json_encode(['ok' => false, 'error' => 'invalid_param', 'key' => $key]);
+    exit;
+}
 
 $data = [];
 if (file_exists($file)) {
     $data = json_decode(file_get_contents($file), true) ?? [];
 }
+
 if ($val === '') {
     unset($data[$key]);
 } else {
     $data[$key] = $val;
 }
-file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-header('Content-Type: application/json');
+
+$result = file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+if ($result === false) {
+    http_response_code(500);
+    echo json_encode(['ok' => false, 'error' => 'write_failed']);
+    exit;
+}
+
 echo json_encode(['ok' => true]);
 '''
+
+
+def clean(val):
+    """APIがNoneや文字列"null"を返すケースを空文字に変換する"""
+    if val is None:
+        return ""
+    s = str(val).strip()
+    return "" if s.lower() == "null" else s
+
+
+def strip_company_type(name: str) -> str:
+    """株式会社・有限会社などの法人格表記を除去する"""
+    patterns = [
+        r'株式会社', r'有限会社', r'合同会社', r'合資会社', r'合名会社',
+        r'（株）', r'\(株\)', r'㈱',
+        r'（有）', r'\(有\)', r'㈲',
+        r'（合）', r'\(合\)',
+    ]
+    for p in patterns:
+        name = re.sub(r'\s*' + p + r'\s*', '', name)
+    return name.strip()
+
+
+def fetch_name_from_yahoo(code: str) -> str:
+    """Yahoo!ファイナンスから銘柄名を取得する（nameがnullの場合のフォールバック）"""
+    try:
+        url = f"https://finance.yahoo.co.jp/quote/{code}.T"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "Accept-Language": "ja,en;q=0.9",
+        }
+        res = requests.get(url, headers=headers, timeout=10)
+        if res.status_code != 200:
+            return ""
+        html = res.text
+
+        # og:titleから「社名（コード）」を取得
+        m = re.search(r'property="og:title"\s+content="([^"]+)"', html)
+        if m:
+            raw = m.group(1)
+            n = re.match(r'^(.+?)[\s　]*[\(（][0-9]{4}[\)）]', raw)
+            name = n.group(1).strip() if n else raw.strip()
+            return strip_company_type(name)
+
+        # titleタグからフォールバック
+        m2 = re.search(r'<title>\s*(.+?)[\s　（(【]', html)
+        if m2:
+            return strip_company_type(m2.group(1).strip())
+
+    except Exception as e:
+        print(f"    Yahoo!取得失敗 {code}: {e}")
+    return ""
 
 
 def main():
@@ -293,13 +368,26 @@ def main():
                 data = res.json()
                 for r in data:
                     if r.get("code") and r.get("code") != "0000":
+                        code = r.get("code", "")
+                        name = clean(r.get("name"))
+
+                        # nameが空ならYahoo!から取得
+                        if not name and code:
+                            print(f"    ⚠️ name=null: {code} → Yahoo!から取得中...")
+                            name = fetch_name_from_yahoo(code)
+                            if name:
+                                print(f"    ✅ 取得成功: {code} → {name}")
+                            else:
+                                print(f"    ❌ 取得失敗: {code} → 空のまま")
+                            time.sleep(1)
+
                         all_data.append({
                             "month": month,
-                            "code":  r.get("code", ""),
-                            "name":  r.get("name", "") or "",
-                            "yutai": r.get("yutai", "") or "",
+                            "code":  code,
+                            "name":  name,
+                            "yutai": clean(r.get("yutai")),
                             "gyaku": int(r.get("gyaku_days", 0) or 0),
-                            "kenri": r.get("d_kenri", "") or "",
+                            "kenri": clean(r.get("d_kenri")),
                             "nvol":  int(r.get("nvol", 0) or 0),
                             "kvol":  int(r.get("kvol", 0) or 0),
                             "rvol":  int(r.get("rvol", 0) or 0),
@@ -378,7 +466,7 @@ def main():
     with open("kokuzetsu_data.json", "w", encoding="utf-8") as f:
         json.dump(kokuzetsu, f, ensure_ascii=False)
 
-    # .htaccess: 機密ファイルへの直接アクセスを禁止 / JSから読むファイルは許可
+    # .htaccess
     htaccess = """# users.json / prev.json / kokuzetsu.json は直接アクセス禁止
 <Files "users.json">
     <IfVersion < 2.4>
