@@ -260,71 +260,6 @@ echo json_encode(['ok' => true]);
 '''
 
 
-def clean(val):
-    """APIが文字列"null"を返すケースを空文字に変換する"""
-    if val is None:
-        return ""
-    s = str(val).strip()
-    return "" if s.lower() == "null" else s
-
-
-def strip_company_type(name: str) -> str:
-    """株式会社・有限会社などの法人格表記を除去する"""
-    import re
-    # 前後のスペース系も含めて除去
-    patterns = [
-        r'株式会社',
-        r'有限会社',
-        r'合同会社',
-        r'合資会社',
-        r'合名会社',
-        r'（株）',
-        r'\(株\)',
-        r'㈱',
-        r'（有）',
-        r'\(有\)',
-        r'㈲',
-        r'（合）',
-        r'\(合\)',
-    ]
-    for p in patterns:
-        name = re.sub(r'\s*' + p + r'\s*', '', name)
-    return name.strip()
-
-
-def fetch_name_from_yahoo(code: str) -> str:
-    """Yahoo!ファイナンスから銘柄名を取得する（nullの場合のフォールバック）"""
-    try:
-        url = f"https://finance.yahoo.co.jp/quote/{code}.T"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Accept-Language": "ja,en;q=0.9",
-        }
-        res = requests.get(url, headers=headers, timeout=10)
-        if res.status_code != 200:
-            return ""
-        html = res.text
-
-        # og:title から「社名（コード）」を取得
-        import re
-        m = re.search(r'property="og:title"\s+content="([^"]+)"', html)
-        if m:
-            raw = m.group(1)
-            # 「北浜キャピタル&コンサルティング(2134)」→ 社名だけ
-            n = re.match(r'^(.+?)[\s　]*[\(（][0-9]{4}[\)）]', raw)
-            name = n.group(1).strip() if n else raw.strip()
-            return strip_company_type(name)
-
-        # title タグからフォールバック
-        m2 = re.search(r'<title>\s*(.+?)[\s　（(【]', html)
-        if m2:
-            return strip_company_type(m2.group(1).strip())
-
-    except Exception as e:
-        print(f"    Yahoo!取得失敗 {code}: {e}")
-    return ""
-
-
 def main():
     now          = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
@@ -358,26 +293,13 @@ def main():
                 data = res.json()
                 for r in data:
                     if r.get("code") and r.get("code") != "0000":
-                        name = clean(r.get("name"))
-                        code = r.get("code", "")
-
-                        # nameが空ならYahoo!ファイナンスから取得
-                        if not name and code:
-                            print(f"    ⚠️ name=null: {code} → Yahoo!から取得中...")
-                            name = fetch_name_from_yahoo(code)
-                            if name:
-                                print(f"    ✅ 取得成功: {code} → {name}")
-                            else:
-                                print(f"    ❌ 取得失敗: {code} → 空のまま")
-                            time.sleep(1)  # Yahoo!への連続アクセス対策
-
                         all_data.append({
                             "month": month,
-                            "code":  code,
-                            "name":  name,
-                            "yutai": clean(r.get("yutai")),
+                            "code":  r.get("code", ""),
+                            "name":  r.get("name", "") or "",
+                            "yutai": r.get("yutai", "") or "",
                             "gyaku": int(r.get("gyaku_days", 0) or 0),
-                            "kenri": clean(r.get("d_kenri")),
+                            "kenri": r.get("d_kenri", "") or "",
                             "nvol":  int(r.get("nvol", 0) or 0),
                             "kvol":  int(r.get("kvol", 0) or 0),
                             "rvol":  int(r.get("rvol", 0) or 0),
@@ -465,9 +387,6 @@ def main():
     Deny from all
 </Files>
 <Files "kokuzetsu.json">
-    Deny from all
-</Files>
-<Files "hashi_data.json">
     Deny from all
 </Files>
 """
