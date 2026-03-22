@@ -378,16 +378,56 @@ def main():
     with open("kokuzetsu_data.json", "w", encoding="utf-8") as f:
         json.dump(kokuzetsu, f, ensure_ascii=False)
 
-    # .htaccess: 機密ファイルへの直接アクセスを禁止
-    htaccess = """# 機密ファイルへの直接アクセス禁止
+    # .htaccess: 機密ファイルへの直接アクセスを禁止 / JSから読むファイルは許可
+    htaccess = """# users.json / prev.json / kokuzetsu.json は直接アクセス禁止
 <Files "users.json">
-    Deny from all
+    <IfVersion < 2.4>
+        Deny from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all denied
+    </IfVersion>
 </Files>
 <Files "prev.json">
-    Deny from all
+    <IfVersion < 2.4>
+        Deny from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all denied
+    </IfVersion>
 </Files>
 <Files "kokuzetsu.json">
-    Deny from all
+    <IfVersion < 2.4>
+        Deny from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all denied
+    </IfVersion>
+</Files>
+# stock_data.json / kokuzetsu_data.json / hashi_data.json はJSから読むため許可
+<Files "stock_data.json">
+    <IfVersion < 2.4>
+        Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all granted
+    </IfVersion>
+</Files>
+<Files "kokuzetsu_data.json">
+    <IfVersion < 2.4>
+        Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all granted
+    </IfVersion>
+</Files>
+<Files "hashi_data.json">
+    <IfVersion < 2.4>
+        Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all granted
+    </IfVersion>
 </Files>
 """
 
