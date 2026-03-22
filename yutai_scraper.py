@@ -352,6 +352,18 @@ def main():
         with open("kokuzetsu.json", "r", encoding="utf-8") as f:
             kokuzetsu = json.load(f)
 
+    # --- name_cache.json を読む（一度取得した社名はキャッシュ済み） ---
+    name_cache = {}
+    if os.path.exists("name_cache.json"):
+        with open("name_cache.json", "r", encoding="utf-8") as f:
+            name_cache = json.load(f)
+        name_cache_updated = False
+    else:
+        # 初回：空ファイルを作成しておく（git addで存在しないエラーを防ぐ）
+        with open("name_cache.json", "w", encoding="utf-8") as f:
+            json.dump({}, f)
+        name_cache_updated = True  # 初回作成もコミット対象に
+
     # --- クロール ---
     all_data = []
     print("🚀 取得開始...")
@@ -371,15 +383,23 @@ def main():
                         code = r.get("code", "")
                         name = clean(r.get("name"))
 
-                        # nameが空ならYahoo!から取得
+                        # nameが空の場合：キャッシュ確認→なければYahoo!取得
                         if not name and code:
-                            print(f"    ⚠️ name=null: {code} → Yahoo!から取得中...")
-                            name = fetch_name_from_yahoo(code)
-                            if name:
-                                print(f"    ✅ 取得成功: {code} → {name}")
+                            if code in name_cache:
+                                name = name_cache[code]
+                                print(f"    📦 キャッシュ使用: {code} → {name}")
                             else:
-                                print(f"    ❌ 取得失敗: {code} → 空のまま")
-                            time.sleep(1)
+                                print(f"    ⚠️ name=null: {code} → Yahoo!から取得中...")
+                                name = fetch_name_from_yahoo(code)
+                                if name:
+                                    print(f"    ✅ 取得成功: {code} → {name}")
+                                    name_cache[code] = name
+                                    name_cache_updated = True
+                                else:
+                                    print(f"    ❌ 取得失敗: {code} → 空のまま（キャッシュに記録）")
+                                    name_cache[code] = ""  # 次回以降Yahoo!を叩かない
+                                    name_cache_updated = True
+                                time.sleep(1)
 
                         all_data.append({
                             "month": month,
@@ -399,6 +419,12 @@ def main():
             time.sleep(1)
         except Exception as e:
             print(f"  ⚠️ {month}月 エラー: {e}")
+
+    # --- name_cache.json を更新（新規取得があった場合のみ） ---
+    if name_cache_updated:
+        with open("name_cache.json", "w", encoding="utf-8") as f:
+            json.dump(name_cache, f, ensure_ascii=False, indent=2)
+        print(f"📦 name_cache.json 更新完了（{len(name_cache)}件）")
 
     if not all_data:
         print("データなし")
