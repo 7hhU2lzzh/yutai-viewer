@@ -141,7 +141,7 @@ def fetch_name_from_yahoo(code: str) -> str:
 
 def is_night_snapshot_time(now: datetime) -> bool:
     """現在時刻が23:00〜23:10 JSTかどうか判定"""
-    return True  # テスト用：一時的に強制有効
+    return now.hour == 23 and now.minute <= 10
 
 
 def load_night_snapshot() -> dict:
