@@ -335,11 +335,35 @@ def fetch_name_from_yahoo(code: str) -> str:
     return ""
 
 
+def is_night_snapshot_time(now: datetime) -> bool:
+    """現在時刻が23:00〜23:10 JSTかどうか判定"""
+    return now.hour == 23 and now.minute <= 10
+
+
+def load_night_snapshot() -> dict:
+    """night_snapshot.json を読み込む（銘柄ごとの夜23時データ）"""
+    if os.path.exists("night_snapshot.json"):
+        with open("night_snapshot.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_night_snapshot(snapshot: dict):
+    """night_snapshot.json を保存"""
+    with open("night_snapshot.json", "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=2)
+
+
 def main():
     now          = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
+
+    # --- 夜23時スナップショット判定 ---
+    is_night = is_night_snapshot_time(now)
+    if is_night:
+        print("🌙 夜23時スナップショットモード")
 
     # --- prev.json と kokuzetsu.json を読む ---
     prev_data = {}
@@ -351,6 +375,9 @@ def main():
     if os.path.exists("kokuzetsu.json"):
         with open("kokuzetsu.json", "r", encoding="utf-8") as f:
             kokuzetsu = json.load(f)
+
+    # --- night_snapshot.json を読む ---
+    night_snapshot = load_night_snapshot()
 
     # --- name_cache.json を読む（一度取得した社名はキャッシュ済み） ---
     name_cache = {}
@@ -430,6 +457,26 @@ def main():
         print("データなし")
         return
 
+    # --- 夜23時スナップショット更新 ---
+    if is_night:
+        print("🌙 夜23時スナップショット保存中...")
+        snapshot_date = now.strftime('%Y-%m-%d')
+        snapshot_time = now.strftime('%H:%M')
+        for r in all_data:
+            snap_key = f"{r['month']}_{r['code']}"
+            night_snapshot[snap_key] = {
+                "date": snapshot_date,
+                "time": snapshot_time,
+                "nvol": r["nvol"],
+                "kvol": r["kvol"],
+                "rvol": r["rvol"],
+                "svol": r["svol"],
+                "gvol": r["gvol"],
+                "mvol": r["mvol"],
+            }
+        save_night_snapshot(night_snapshot)
+        print(f"🌙 night_snapshot.json 更新完了（{len(night_snapshot)}件）")
+
     # --- 枯渇検出 ---
     print("🔍 枯渇検出中...")
     for r in all_data:
@@ -481,7 +528,12 @@ def main():
         with open("users.json", "w", encoding="utf-8") as f:
             json.dump(initial_users, f, ensure_ascii=False, indent=2)
 
-    # --- stock_data.json を生成 ---
+    # --- stock_data.json を生成（night_snapshot_latest を埋め込む） ---
+    for r in all_data:
+        snap_key = f"{r['month']}_{r['code']}"
+        if snap_key in night_snapshot:
+            r["night_snapshot_latest"] = night_snapshot[snap_key]
+
     stock_data = {
         "update_time": update_time,
         "data": all_data
