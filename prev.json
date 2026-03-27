@@ -17,7 +17,7 @@
   },
   "1_1928": {
     "nvol": 1000,
-    "kvol": 539800,
+    "kvol": 83800,
     "rvol": 126100,
     "svol": 1,
     "gvol": 0,
@@ -80,7 +80,7 @@
     "mvol": 0
   },
   "1_3193": {
-    "nvol": 1700,
+    "nvol": 1400,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -1555,15 +1555,15 @@
     "nvol": 0,
     "kvol": 2900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_1332": {
     "nvol": 0,
-    "kvol": 247700,
+    "kvol": 18100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -1571,7 +1571,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1579,7 +1579,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1587,7 +1587,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -1609,9 +1609,9 @@
   },
   "3_1417": {
     "nvol": 0,
-    "kvol": 58800,
+    "kvol": 45800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1651,7 +1651,7 @@
     "nvol": 0,
     "kvol": 7700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1659,7 +1659,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1683,7 +1683,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1705,9 +1705,9 @@
   },
   "3_1762": {
     "nvol": 0,
-    "kvol": 10500,
+    "kvol": 7800,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -1737,25 +1737,25 @@
   },
   "3_1801": {
     "nvol": 0,
-    "kvol": 132900,
+    "kvol": 22400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_1803": {
     "nvol": 0,
-    "kvol": 423300,
+    "kvol": 55500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_1808": {
     "nvol": 0,
-    "kvol": 697900,
+    "kvol": 25100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1777,9 +1777,9 @@
   },
   "3_1860": {
     "nvol": 0,
-    "kvol": 171200,
+    "kvol": 137700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1793,17 +1793,17 @@
   },
   "3_1925": {
     "nvol": 0,
-    "kvol": 302200,
+    "kvol": 10100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_1952": {
     "nvol": 0,
-    "kvol": 10600,
+    "kvol": 7500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1817,9 +1817,9 @@
   },
   "3_1976": {
     "nvol": 0,
-    "kvol": 12000,
+    "kvol": 10900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -1835,23 +1835,23 @@
     "nvol": 0,
     "kvol": 8700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2002": {
     "nvol": 0,
-    "kvol": 180000,
+    "kvol": 21800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2004": {
     "nvol": 0,
-    "kvol": 10800,
+    "kvol": 9200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1859,7 +1859,7 @@
     "nvol": 0,
     "kvol": 1400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1867,15 +1867,15 @@
     "nvol": 0,
     "kvol": 1200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_2109": {
     "nvol": 0,
-    "kvol": 23500,
+    "kvol": 7300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1891,12 +1891,12 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_2120": {
-    "nvol": 0,
+    "nvol": 1400,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -1931,7 +1931,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1947,7 +1947,7 @@
     "nvol": 0,
     "kvol": 100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1963,7 +1963,7 @@
     "nvol": 0,
     "kvol": 14600,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -1977,9 +1977,9 @@
   },
   "3_2229": {
     "nvol": 0,
-    "kvol": 42900,
+    "kvol": 32200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -1987,23 +1987,23 @@
     "nvol": 0,
     "kvol": 24700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2269": {
     "nvol": 0,
-    "kvol": 170200,
+    "kvol": 16700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2282": {
     "nvol": 0,
-    "kvol": 74300,
+    "kvol": 7900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -2019,7 +2019,7 @@
     "nvol": 0,
     "kvol": 6800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -2131,7 +2131,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -2169,9 +2169,9 @@
   },
   "3_2531": {
     "nvol": 0,
-    "kvol": 71200,
+    "kvol": 51300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -2219,7 +2219,7 @@
     "nvol": 0,
     "kvol": 2900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -2257,17 +2257,17 @@
   },
   "3_2730": {
     "nvol": 0,
-    "kvol": 13900,
+    "kvol": 13600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_2733": {
     "nvol": 0,
-    "kvol": 20900,
+    "kvol": 16700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2313,17 +2313,17 @@
   },
   "3_2801": {
     "nvol": 0,
-    "kvol": 586500,
+    "kvol": 84000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2802": {
     "nvol": 0,
-    "kvol": 511600,
+    "kvol": 135100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2353,9 +2353,9 @@
   },
   "3_2810": {
     "nvol": 0,
-    "kvol": 29500,
+    "kvol": 20100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2377,9 +2377,9 @@
   },
   "3_2815": {
     "nvol": 0,
-    "kvol": 19900,
+    "kvol": 16900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2417,17 +2417,17 @@
   },
   "3_2871": {
     "nvol": 0,
-    "kvol": 168300,
+    "kvol": 22900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_2875": {
     "nvol": 0,
-    "kvol": 75500,
+    "kvol": 63900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2457,9 +2457,9 @@
   },
   "3_2897": {
     "nvol": 0,
-    "kvol": 23100,
+    "kvol": 23000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2483,7 +2483,7 @@
     "nvol": 0,
     "kvol": 2900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -2499,7 +2499,7 @@
     "nvol": 0,
     "kvol": 100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -2571,7 +2571,7 @@
     "nvol": 0,
     "kvol": 3900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -2609,9 +2609,9 @@
   },
   "3_3036": {
     "nvol": 0,
-    "kvol": 12000,
+    "kvol": 7900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2667,7 +2667,7 @@
     "nvol": 0,
     "kvol": 180100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2689,9 +2689,9 @@
   },
   "3_3099": {
     "nvol": 0,
-    "kvol": 340100,
+    "kvol": 322200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -2723,7 +2723,7 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2747,7 +2747,7 @@
     "nvol": 0,
     "kvol": 45100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2779,7 +2779,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -2787,7 +2787,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -2849,17 +2849,17 @@
   },
   "3_3289": {
     "nvol": 0,
-    "kvol": 436800,
+    "kvol": 78100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_3291": {
     "nvol": 0,
-    "kvol": 88300,
+    "kvol": 79400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -2923,7 +2923,7 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -2939,7 +2939,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -3065,17 +3065,17 @@
   },
   "3_3563": {
     "nvol": 0,
-    "kvol": 112200,
+    "kvol": 95900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_3569": {
     "nvol": 0,
-    "kvol": 31500,
+    "kvol": 25900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3089,9 +3089,9 @@
   },
   "3_3591": {
     "nvol": 0,
-    "kvol": 17500,
+    "kvol": 12600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3113,9 +3113,9 @@
   },
   "3_3635": {
     "nvol": 0,
-    "kvol": 56500,
+    "kvol": 17300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3195,7 +3195,7 @@
     "nvol": 0,
     "kvol": 4200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3233,7 +3233,7 @@
   },
   "3_3769": {
     "nvol": 0,
-    "kvol": 38100,
+    "kvol": 32600,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -3291,7 +3291,7 @@
     "nvol": 0,
     "kvol": 900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3313,17 +3313,17 @@
   },
   "3_3861": {
     "nvol": 0,
-    "kvol": 650000,
+    "kvol": 74000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_3863": {
     "nvol": 0,
-    "kvol": 42300,
+    "kvol": 37500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -3337,9 +3337,9 @@
   },
   "3_3880": {
     "nvol": 0,
-    "kvol": 51900,
+    "kvol": 39300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3465,9 +3465,9 @@
   },
   "3_4061": {
     "nvol": 0,
-    "kvol": 33900,
+    "kvol": 6200,
     "rvol": 152400,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3481,9 +3481,9 @@
   },
   "3_4088": {
     "nvol": 0,
-    "kvol": 140800,
+    "kvol": 116000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3531,7 +3531,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3545,7 +3545,7 @@
   },
   "3_4220": {
     "nvol": 0,
-    "kvol": 17500,
+    "kvol": 12500,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -3579,7 +3579,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3595,7 +3595,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3603,7 +3603,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3611,7 +3611,7 @@
     "nvol": 0,
     "kvol": 5500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3619,7 +3619,7 @@
     "nvol": 0,
     "kvol": 700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3651,7 +3651,7 @@
     "nvol": 0,
     "kvol": 700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3755,7 +3755,7 @@
     "nvol": 0,
     "kvol": 500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3785,17 +3785,17 @@
   },
   "3_4526": {
     "nvol": 0,
-    "kvol": 8800,
+    "kvol": 7700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_4527": {
     "nvol": 0,
-    "kvol": 166400,
+    "kvol": 27800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -3803,7 +3803,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3817,15 +3817,15 @@
   },
   "3_4543": {
     "nvol": 0,
-    "kvol": 740300,
+    "kvol": 162000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_4559": {
     "nvol": 0,
-    "kvol": 14500,
+    "kvol": 12900,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -3835,7 +3835,7 @@
     "nvol": 0,
     "kvol": 1700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 0
   },
@@ -3881,17 +3881,17 @@
   },
   "3_4661": {
     "nvol": 0,
-    "kvol": 583100,
+    "kvol": 122500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_4665": {
     "nvol": 0,
-    "kvol": 22600,
+    "kvol": 17700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 0
   },
@@ -3907,7 +3907,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -3929,7 +3929,7 @@
   },
   "3_4680": {
     "nvol": 0,
-    "kvol": 160400,
+    "kvol": 9000,
     "rvol": 0,
     "svol": 0,
     "gvol": 2,
@@ -3937,9 +3937,9 @@
   },
   "3_4681": {
     "nvol": 0,
-    "kvol": 140500,
+    "kvol": 140200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -3953,9 +3953,9 @@
   },
   "3_4694": {
     "nvol": 0,
-    "kvol": 35600,
+    "kvol": 18400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -3977,17 +3977,17 @@
   },
   "3_4732": {
     "nvol": 0,
-    "kvol": 377800,
+    "kvol": 321200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_4733": {
     "nvol": 0,
-    "kvol": 28400,
+    "kvol": 24900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -4019,7 +4019,7 @@
     "nvol": 0,
     "kvol": 900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4035,7 +4035,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4065,9 +4065,9 @@
   },
   "3_4901": {
     "nvol": 0,
-    "kvol": 632400,
+    "kvol": 165600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4099,7 +4099,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4131,7 +4131,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4155,7 +4155,7 @@
     "nvol": 0,
     "kvol": 1700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4169,9 +4169,9 @@
   },
   "3_5142": {
     "nvol": 0,
-    "kvol": 35700,
+    "kvol": 34200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4179,15 +4179,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_5186": {
     "nvol": 0,
-    "kvol": 12600,
+    "kvol": 9900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4235,7 +4235,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -4259,15 +4259,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_5332": {
     "nvol": 0,
-    "kvol": 96200,
+    "kvol": 17200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4281,9 +4281,9 @@
   },
   "3_5344": {
     "nvol": 0,
-    "kvol": 3300,
+    "kvol": 2300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4307,7 +4307,7 @@
     "nvol": 0,
     "kvol": 707600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4315,7 +4315,7 @@
     "nvol": 0,
     "kvol": 246500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4323,7 +4323,7 @@
     "nvol": 0,
     "kvol": 8300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -4355,7 +4355,7 @@
     "nvol": 0,
     "kvol": 13400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 0
   },
@@ -4363,7 +4363,7 @@
     "nvol": 0,
     "kvol": 27300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4387,7 +4387,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4411,7 +4411,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4425,17 +4425,17 @@
   },
   "3_5830": {
     "nvol": 0,
-    "kvol": 109500,
+    "kvol": 94800,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_5832": {
     "nvol": 0,
-    "kvol": 98900,
+    "kvol": 76400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4451,15 +4451,15 @@
     "nvol": 0,
     "kvol": 63700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_5844": {
     "nvol": 0,
-    "kvol": 183700,
+    "kvol": 11100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4475,7 +4475,7 @@
     "nvol": 0,
     "kvol": 300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4489,9 +4489,9 @@
   },
   "3_5911": {
     "nvol": 0,
-    "kvol": 24300,
+    "kvol": 20500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4505,9 +4505,9 @@
   },
   "3_5929": {
     "nvol": 0,
-    "kvol": 147100,
+    "kvol": 119900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4515,7 +4515,7 @@
     "nvol": 0,
     "kvol": 5900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4545,9 +4545,9 @@
   },
   "3_5949": {
     "nvol": 0,
-    "kvol": 48900,
+    "kvol": 45600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -4585,15 +4585,15 @@
   },
   "3_5970": {
     "nvol": 0,
-    "kvol": 12200,
+    "kvol": 8800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_5976": {
     "nvol": 0,
-    "kvol": 53400,
+    "kvol": 49600,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -4603,7 +4603,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 0
   },
@@ -4611,7 +4611,7 @@
     "nvol": 0,
     "kvol": 700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4689,9 +4689,9 @@
   },
   "3_6157": {
     "nvol": 0,
-    "kvol": 1200,
+    "kvol": 1000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4747,7 +4747,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4755,7 +4755,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4763,15 +4763,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_6247": {
     "nvol": 0,
-    "kvol": 52500,
+    "kvol": 49600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4787,7 +4787,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4795,7 +4795,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4833,9 +4833,9 @@
   },
   "3_6301": {
     "nvol": 0,
-    "kvol": 409500,
+    "kvol": 127700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4843,15 +4843,15 @@
     "nvol": 0,
     "kvol": 400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_6332": {
     "nvol": 0,
-    "kvol": 14300,
+    "kvol": 10700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4859,7 +4859,7 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4867,7 +4867,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4881,25 +4881,25 @@
   },
   "3_6370": {
     "nvol": 0,
-    "kvol": 81400,
+    "kvol": 66500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_6371": {
     "nvol": 0,
-    "kvol": 81400,
+    "kvol": 46400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_6379": {
     "nvol": 0,
-    "kvol": 35900,
+    "kvol": 31400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -4913,25 +4913,25 @@
   },
   "3_6407": {
     "nvol": 0,
-    "kvol": 55200,
+    "kvol": 47900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_6412": {
     "nvol": 0,
-    "kvol": 18500,
+    "kvol": 7400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_6417": {
     "nvol": 0,
-    "kvol": 171800,
+    "kvol": 145400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -4939,15 +4939,15 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_6420": {
     "nvol": 0,
-    "kvol": 17800,
+    "kvol": 14100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4969,9 +4969,9 @@
   },
   "3_6458": {
     "nvol": 0,
-    "kvol": 25400,
+    "kvol": 17800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -4979,7 +4979,7 @@
     "nvol": 0,
     "kvol": 4300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -4995,15 +4995,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 0
   },
   "3_6490": {
     "nvol": 0,
-    "kvol": 4900,
+    "kvol": 3500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5017,9 +5017,9 @@
   },
   "3_6517": {
     "nvol": 0,
-    "kvol": 1000,
+    "kvol": 700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5089,9 +5089,9 @@
   },
   "3_6586": {
     "nvol": 0,
-    "kvol": 59300,
+    "kvol": 30000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5139,7 +5139,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5147,15 +5147,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_6737": {
     "nvol": 0,
-    "kvol": 13600,
+    "kvol": 9600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5163,7 +5163,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5171,7 +5171,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5203,7 +5203,7 @@
     "nvol": 0,
     "kvol": 700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5211,7 +5211,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5241,9 +5241,9 @@
   },
   "3_6941": {
     "nvol": 0,
-    "kvol": 10900,
+    "kvol": 8400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5257,9 +5257,9 @@
   },
   "3_6947": {
     "nvol": 0,
-    "kvol": 22500,
+    "kvol": 9400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5273,9 +5273,9 @@
   },
   "3_6971": {
     "nvol": 0,
-    "kvol": 1060600,
+    "kvol": 891300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5403,7 +5403,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5433,49 +5433,49 @@
   },
   "3_7164": {
     "nvol": 0,
-    "kvol": 60000,
+    "kvol": 6700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_7167": {
     "nvol": 0,
-    "kvol": 650100,
+    "kvol": 520700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_7173": {
     "nvol": 0,
-    "kvol": 27400,
+    "kvol": 24100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_7180": {
     "nvol": 0,
-    "kvol": 232000,
+    "kvol": 183900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_7182": {
     "nvol": 0,
-    "kvol": 1019000,
+    "kvol": 828100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_7186": {
     "nvol": 0,
-    "kvol": 667600,
+    "kvol": 533300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5483,7 +5483,7 @@
     "nvol": 0,
     "kvol": 500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5507,7 +5507,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5515,7 +5515,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5545,9 +5545,9 @@
   },
   "3_7231": {
     "nvol": 0,
-    "kvol": 7500,
+    "kvol": 5500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5563,7 +5563,7 @@
     "nvol": 0,
     "kvol": 3200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5585,9 +5585,9 @@
   },
   "3_7267": {
     "nvol": 0,
-    "kvol": 1486700,
+    "kvol": 578100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5601,9 +5601,9 @@
   },
   "3_7276": {
     "nvol": 0,
-    "kvol": 105100,
+    "kvol": 101800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5633,9 +5633,9 @@
   },
   "3_7296": {
     "nvol": 0,
-    "kvol": 23700,
+    "kvol": 21100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -5649,9 +5649,9 @@
   },
   "3_7313": {
     "nvol": 0,
-    "kvol": 22800,
+    "kvol": 7700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -5667,7 +5667,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5683,15 +5683,15 @@
     "nvol": 0,
     "kvol": 23500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_7337": {
     "nvol": 0,
-    "kvol": 182900,
+    "kvol": 149500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -5705,9 +5705,9 @@
   },
   "3_7350": {
     "nvol": 0,
-    "kvol": 7900,
+    "kvol": 6600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5731,7 +5731,7 @@
     "nvol": 0,
     "kvol": 2700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5739,7 +5739,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -5747,7 +5747,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5785,9 +5785,9 @@
   },
   "3_7419": {
     "nvol": 0,
-    "kvol": 59800,
+    "kvol": 31000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -5833,9 +5833,9 @@
   },
   "3_7456": {
     "nvol": 0,
-    "kvol": 7100,
+    "kvol": 6100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -5843,7 +5843,7 @@
     "nvol": 0,
     "kvol": 31900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5859,7 +5859,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5867,7 +5867,7 @@
     "nvol": 0,
     "kvol": 100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5883,15 +5883,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_7483": {
     "nvol": 0,
-    "kvol": 14700,
+    "kvol": 12500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -5923,7 +5923,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5939,7 +5939,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5947,7 +5947,7 @@
     "nvol": 0,
     "kvol": 1000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5955,7 +5955,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -5985,9 +5985,9 @@
   },
   "3_7550": {
     "nvol": 0,
-    "kvol": 82900,
+    "kvol": 67300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -5995,7 +5995,7 @@
     "nvol": 0,
     "kvol": 2500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -6075,7 +6075,7 @@
     "nvol": 0,
     "kvol": 7100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6099,7 +6099,7 @@
     "nvol": 0,
     "kvol": 2600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6195,7 +6195,7 @@
     "nvol": 0,
     "kvol": 332800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6219,7 +6219,7 @@
     "nvol": 0,
     "kvol": 12700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6233,9 +6233,9 @@
   },
   "3_7832": {
     "nvol": 0,
-    "kvol": 380700,
+    "kvol": 72000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6275,23 +6275,23 @@
     "nvol": 0,
     "kvol": 1800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_7864": {
     "nvol": 0,
-    "kvol": 38000,
+    "kvol": 33500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
   "3_7867": {
     "nvol": 0,
-    "kvol": 36500,
+    "kvol": 26100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6307,7 +6307,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6339,7 +6339,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6355,15 +6355,15 @@
     "nvol": 0,
     "kvol": 19900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_7911": {
     "nvol": 0,
-    "kvol": 211100,
+    "kvol": 33700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6371,7 +6371,7 @@
     "nvol": 0,
     "kvol": 2200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6379,7 +6379,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6403,7 +6403,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6427,7 +6427,7 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6435,7 +6435,7 @@
     "nvol": 0,
     "kvol": 500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6443,7 +6443,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6459,7 +6459,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6467,7 +6467,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6475,7 +6475,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6491,7 +6491,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -6499,7 +6499,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6507,7 +6507,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6521,15 +6521,15 @@
   },
   "3_8032": {
     "nvol": 0,
-    "kvol": 43800,
+    "kvol": 14300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8037": {
     "nvol": 0,
-    "kvol": 79800,
+    "kvol": 77000,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -6537,9 +6537,9 @@
   },
   "3_8043": {
     "nvol": 0,
-    "kvol": 20300,
+    "kvol": 13700,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6555,7 +6555,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6563,7 +6563,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6571,7 +6571,7 @@
     "nvol": 0,
     "kvol": 400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6595,7 +6595,7 @@
     "nvol": 0,
     "kvol": 400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6603,15 +6603,15 @@
     "nvol": 0,
     "kvol": 2100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_8086": {
     "nvol": 0,
-    "kvol": 65700,
+    "kvol": 42400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6635,7 +6635,7 @@
     "nvol": 0,
     "kvol": 1600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6707,7 +6707,7 @@
     "nvol": 0,
     "kvol": 7400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6715,7 +6715,7 @@
     "nvol": 0,
     "kvol": 8900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6731,7 +6731,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6747,7 +6747,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6763,7 +6763,7 @@
     "nvol": 0,
     "kvol": 1800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -6787,7 +6787,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -6801,17 +6801,17 @@
   },
   "3_8214": {
     "nvol": 0,
-    "kvol": 19000,
+    "kvol": 14300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_8218": {
     "nvol": 0,
-    "kvol": 17400,
+    "kvol": 14600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6833,17 +6833,17 @@
   },
   "3_8242": {
     "nvol": 0,
-    "kvol": 49700,
+    "kvol": 37700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_8255": {
     "nvol": 0,
-    "kvol": 34100,
+    "kvol": 29200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6859,13 +6859,13 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_8282": {
     "nvol": 0,
-    "kvol": 95000,
+    "kvol": 88200,
     "rvol": 0,
     "svol": 0,
     "gvol": 1,
@@ -6897,9 +6897,9 @@
   },
   "3_8308": {
     "nvol": 0,
-    "kvol": 1332400,
+    "kvol": 309200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6907,7 +6907,7 @@
     "nvol": 0,
     "kvol": 309400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6915,7 +6915,7 @@
     "nvol": 0,
     "kvol": 243200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6931,7 +6931,7 @@
     "nvol": 0,
     "kvol": 11600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6945,7 +6945,7 @@
   },
   "3_8343": {
     "nvol": 0,
-    "kvol": 21700,
+    "kvol": 20000,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -6955,7 +6955,7 @@
     "nvol": 0,
     "kvol": 3300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -6969,9 +6969,9 @@
   },
   "3_8346": {
     "nvol": 0,
-    "kvol": 89800,
+    "kvol": 26300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -6993,9 +6993,9 @@
   },
   "3_8354": {
     "nvol": 0,
-    "kvol": 104000,
+    "kvol": 82500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7009,7 +7009,7 @@
   },
   "3_8359": {
     "nvol": 0,
-    "kvol": 281700,
+    "kvol": 228500,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -7017,17 +7017,17 @@
   },
   "3_8360": {
     "nvol": 0,
-    "kvol": 35100,
+    "kvol": 8300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8361": {
     "nvol": 0,
-    "kvol": 19500,
+    "kvol": 14200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7035,7 +7035,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7065,9 +7065,9 @@
   },
   "3_8368": {
     "nvol": 0,
-    "kvol": 185900,
+    "kvol": 91900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -7081,9 +7081,9 @@
   },
   "3_8377": {
     "nvol": 0,
-    "kvol": 75800,
+    "kvol": 60500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7097,9 +7097,9 @@
   },
   "3_8381": {
     "nvol": 0,
-    "kvol": 100800,
+    "kvol": 47500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7139,15 +7139,15 @@
     "nvol": 0,
     "kvol": 2200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
   "3_8388": {
     "nvol": 0,
-    "kvol": 16400,
+    "kvol": 15600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7169,9 +7169,9 @@
   },
   "3_8418": {
     "nvol": 0,
-    "kvol": 131100,
+    "kvol": 23100,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -7185,15 +7185,15 @@
   },
   "3_8424": {
     "nvol": 0,
-    "kvol": 39900,
+    "kvol": 34400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
   "3_8473": {
     "nvol": 0,
-    "kvol": 340700,
+    "kvol": 251000,
     "rvol": 0,
     "svol": 0,
     "gvol": 2,
@@ -7211,15 +7211,15 @@
     "nvol": 0,
     "kvol": 4100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8524": {
     "nvol": 0,
-    "kvol": 159100,
+    "kvol": 122900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7257,9 +7257,9 @@
   },
   "3_8544": {
     "nvol": 0,
-    "kvol": 59600,
+    "kvol": 11300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7267,7 +7267,7 @@
     "nvol": 0,
     "kvol": 200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7289,9 +7289,9 @@
   },
   "3_8566": {
     "nvol": 0,
-    "kvol": 6000,
+    "kvol": 3400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7299,15 +7299,15 @@
     "nvol": 0,
     "kvol": 552600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8609": {
     "nvol": 1800,
-    "kvol": 143300,
+    "kvol": 22300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7315,15 +7315,15 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8616": {
     "nvol": 0,
-    "kvol": 220300,
+    "kvol": 94400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -7337,9 +7337,9 @@
   },
   "3_8698": {
     "nvol": 0,
-    "kvol": 105500,
+    "kvol": 29400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7369,9 +7369,9 @@
   },
   "3_8714": {
     "nvol": 0,
-    "kvol": 152900,
+    "kvol": 121200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -7379,7 +7379,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -7409,9 +7409,9 @@
   },
   "3_8750": {
     "nvol": 0,
-    "kvol": 1765700,
+    "kvol": 504600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -7449,17 +7449,17 @@
   },
   "3_8801": {
     "nvol": 0,
-    "kvol": 1486300,
+    "kvol": 366400,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_8803": {
     "nvol": 0,
-    "kvol": 26200,
+    "kvol": 19400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7467,7 +7467,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -7481,9 +7481,9 @@
   },
   "3_8850": {
     "nvol": 0,
-    "kvol": 19000,
+    "kvol": 14600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7505,9 +7505,9 @@
   },
   "3_8876": {
     "nvol": 0,
-    "kvol": 62800,
+    "kvol": 13600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7515,7 +7515,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -7523,7 +7523,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -7539,7 +7539,7 @@
     "nvol": 0,
     "kvol": 2600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -7555,47 +7555,47 @@
     "nvol": 0,
     "kvol": 760,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9001": {
     "nvol": 0,
-    "kvol": 135400,
+    "kvol": 5400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9003": {
     "nvol": 0,
-    "kvol": 32700,
+    "kvol": 26400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9005": {
     "nvol": 0,
-    "kvol": 363600,
+    "kvol": 51900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9006": {
     "nvol": 0,
-    "kvol": 136200,
+    "kvol": 85500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9007": {
     "nvol": 0,
-    "kvol": 239500,
+    "kvol": 178900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7609,9 +7609,9 @@
   },
   "3_9009": {
     "nvol": 0,
-    "kvol": 328100,
+    "kvol": 42800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7649,25 +7649,25 @@
   },
   "3_9020": {
     "nvol": 0,
-    "kvol": 461600,
+    "kvol": 443200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9021": {
     "nvol": 0,
-    "kvol": 164500,
+    "kvol": 162500,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_9022": {
     "nvol": 0,
-    "kvol": 373300,
+    "kvol": 317700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7675,23 +7675,23 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9024": {
     "nvol": 0,
-    "kvol": 110300,
+    "kvol": 79900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
   "3_9031": {
     "nvol": 0,
-    "kvol": 37800,
+    "kvol": 7700,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7715,23 +7715,23 @@
     "nvol": 0,
     "kvol": 3800,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9041": {
     "nvol": 0,
-    "kvol": 101300,
+    "kvol": 67200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9042": {
     "nvol": 0,
-    "kvol": 138300,
+    "kvol": 88600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -7739,15 +7739,15 @@
     "nvol": 0,
     "kvol": 11900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9045": {
     "nvol": 0,
-    "kvol": 60200,
+    "kvol": 34100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7841,9 +7841,9 @@
   },
   "3_9076": {
     "nvol": 0,
-    "kvol": 50300,
+    "kvol": 35900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7851,7 +7851,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -7881,25 +7881,25 @@
   },
   "3_9101": {
     "nvol": 0,
-    "kvol": 154500,
+    "kvol": 54500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9104": {
     "nvol": 0,
-    "kvol": 71300,
+    "kvol": 51300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9119": {
     "nvol": 0,
-    "kvol": 33800,
+    "kvol": 25900,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7915,7 +7915,7 @@
     "nvol": 0,
     "kvol": 144200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7931,7 +7931,7 @@
     "nvol": 0,
     "kvol": 10000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7939,7 +7939,7 @@
     "nvol": 0,
     "kvol": 20000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -7995,15 +7995,15 @@
     "nvol": 0,
     "kvol": 7200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "3_9301": {
     "nvol": 0,
-    "kvol": 188500,
+    "kvol": 165100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -8011,7 +8011,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8025,9 +8025,9 @@
   },
   "3_9310": {
     "nvol": 0,
-    "kvol": 21400,
+    "kvol": 15800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -8051,7 +8051,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8083,7 +8083,7 @@
     "nvol": 0,
     "kvol": 19200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8099,7 +8099,7 @@
     "nvol": 0,
     "kvol": 4500,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8161,15 +8161,15 @@
   },
   "3_9401": {
     "nvol": 0,
-    "kvol": 35800,
+    "kvol": 21800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9404": {
     "nvol": 0,
-    "kvol": 56800,
+    "kvol": 31600,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -8179,7 +8179,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8187,7 +8187,7 @@
     "nvol": 0,
     "kvol": 5600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8195,7 +8195,7 @@
     "nvol": 0,
     "kvol": 1600,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8217,25 +8217,25 @@
   },
   "3_9432": {
     "nvol": 0,
-    "kvol": 18449600,
+    "kvol": 9875000,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9433": {
     "nvol": 0,
-    "kvol": 1017100,
+    "kvol": 605300,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
   "3_9434": {
     "nvol": 0,
-    "kvol": 10965400,
+    "kvol": 4141000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8243,7 +8243,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8259,7 +8259,7 @@
     "nvol": 0,
     "kvol": 10200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8283,7 +8283,7 @@
     "nvol": 0,
     "kvol": 1300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8307,7 +8307,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8315,7 +8315,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8337,9 +8337,9 @@
   },
   "3_9605": {
     "nvol": 0,
-    "kvol": 19600,
+    "kvol": 15200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8347,7 +8347,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8355,7 +8355,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8425,7 +8425,7 @@
   },
   "3_9684": {
     "nvol": 0,
-    "kvol": 39700,
+    "kvol": 39600,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -8457,9 +8457,9 @@
   },
   "3_9706": {
     "nvol": 0,
-    "kvol": 58100,
+    "kvol": 51200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8491,7 +8491,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8507,13 +8507,13 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9735": {
     "nvol": 0,
-    "kvol": 335400,
+    "kvol": 280400,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -8531,7 +8531,7 @@
     "nvol": 0,
     "kvol": 800,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8603,15 +8603,15 @@
     "nvol": 0,
     "kvol": 257800,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_9832": {
     "nvol": 0,
-    "kvol": 54500,
+    "kvol": 9300,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 2,
     "mvol": 0
   },
@@ -8619,7 +8619,7 @@
     "nvol": 0,
     "kvol": 36100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8665,17 +8665,17 @@
   },
   "3_9869": {
     "nvol": 0,
-    "kvol": 18700,
+    "kvol": 15200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9882": {
     "nvol": 0,
-    "kvol": 35000,
+    "kvol": 27200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 2,
     "mvol": 2
   },
@@ -8683,7 +8683,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8715,7 +8715,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -8739,7 +8739,7 @@
     "nvol": 0,
     "kvol": 5200,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8753,9 +8753,9 @@
   },
   "3_9956": {
     "nvol": 0,
-    "kvol": 27500,
+    "kvol": 22100,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
@@ -8777,17 +8777,17 @@
   },
   "3_9987": {
     "nvol": 0,
-    "kvol": 48300,
+    "kvol": 39900,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 2
   },
   "3_9989": {
     "nvol": 0,
-    "kvol": 66700,
+    "kvol": 6800,
     "rvol": 0,
-    "svol": 2,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
@@ -8809,14 +8809,14 @@
   },
   "3_9997": {
     "nvol": 0,
-    "kvol": 65600,
+    "kvol": 53000,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 1,
     "mvol": 2
   },
   "3_2664": {
-    "nvol": 1500,
+    "nvol": 6500,
     "kvol": 200,
     "rvol": 0,
     "svol": 0,
@@ -8864,8 +8864,8 @@
     "mvol": 0
   },
   "3_5933": {
-    "nvol": 1400,
-    "kvol": 2100,
+    "nvol": 1500,
+    "kvol": 1900,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
@@ -8928,17 +8928,17 @@
     "mvol": 0
   },
   "4_1766": {
-    "nvol": 5700,
-    "kvol": 9600,
+    "nvol": 0,
+    "kvol": 0,
     "rvol": 0,
     "svol": 2,
     "gvol": 0,
     "mvol": 2
   },
   "4_1873": {
-    "nvol": 32200,
+    "nvol": 0,
     "kvol": 0,
-    "rvol": 100,
+    "rvol": 0,
     "svol": 1,
     "gvol": 0,
     "mvol": 0
@@ -8968,8 +8968,8 @@
     "mvol": 0
   },
   "4_2593": {
-    "nvol": 3200,
-    "kvol": 210900,
+    "nvol": 1700,
+    "kvol": 201800,
     "rvol": 96200,
     "svol": 0,
     "gvol": 0,
@@ -8995,7 +8995,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -9008,7 +9008,7 @@
     "mvol": 0
   },
   "4_3180": {
-    "nvol": 5200,
+    "nvol": 500,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -9051,12 +9051,12 @@
     "nvol": 4,
     "kvol": 0,
     "rvol": 555,
-    "svol": 0,
+    "svol": 1,
     "gvol": 0,
     "mvol": 2
   },
   "4_3843": {
-    "nvol": 23500,
+    "nvol": 0,
     "kvol": 0,
     "rvol": 0,
     "svol": 2,
@@ -9168,7 +9168,7 @@
     "mvol": 2
   },
   "4_9279": {
-    "nvol": 20500,
+    "nvol": 17100,
     "kvol": 0,
     "rvol": 0,
     "svol": 1,
@@ -9184,7 +9184,7 @@
     "mvol": 0
   },
   "4_9603": {
-    "nvol": 3200,
+    "nvol": 2300,
     "kvol": 600,
     "rvol": 17600,
     "svol": 1,
@@ -9192,10 +9192,10 @@
     "mvol": 2
   },
   "4_9627": {
-    "nvol": 2100,
-    "kvol": 124500,
+    "nvol": 600,
+    "kvol": 121500,
     "rvol": 58100,
-    "svol": 1,
+    "svol": 2,
     "gvol": 0,
     "mvol": 2
   },
@@ -9248,7 +9248,7 @@
     "mvol": 0
   },
   "5_2791": {
-    "nvol": 1300,
+    "nvol": 1200,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -9256,7 +9256,7 @@
     "mvol": 0
   },
   "5_2792": {
-    "nvol": 7500,
+    "nvol": 5100,
     "kvol": 2500,
     "rvol": 0,
     "svol": 0,
@@ -9480,7 +9480,7 @@
     "mvol": 0
   },
   "5_2678": {
-    "nvol": 1600,
+    "nvol": 600,
     "kvol": 5000,
     "rvol": 0,
     "svol": 0,
@@ -10720,7 +10720,7 @@
     "mvol": 0
   },
   "7_3193": {
-    "nvol": 1700,
+    "nvol": 1400,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -10792,7 +10792,7 @@
     "mvol": 0
   },
   "7_3665": {
-    "nvol": 4900,
+    "nvol": 4400,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -11648,7 +11648,7 @@
     "mvol": 0
   },
   "8_7599": {
-    "nvol": 12500,
+    "nvol": 11500,
     "kvol": 8800,
     "rvol": 36200,
     "svol": 0,
@@ -15603,7 +15603,7 @@
     "nvol": 0,
     "kvol": 0,
     "rvol": 0,
-    "svol": 1,
+    "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
@@ -15624,7 +15624,7 @@
     "mvol": 0
   },
   "10_3038": {
-    "nvol": 1000,
+    "nvol": 0,
     "kvol": 24100,
     "rvol": 0,
     "svol": 0,
@@ -15752,7 +15752,7 @@
     "mvol": 0
   },
   "10_7856": {
-    "nvol": 1300,
+    "nvol": 1200,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -15816,7 +15816,7 @@
     "mvol": 0
   },
   "10_9279": {
-    "nvol": 20600,
+    "nvol": 16500,
     "kvol": 0,
     "rvol": 0,
     "svol": 1,
@@ -15832,7 +15832,7 @@
     "mvol": 0
   },
   "10_9603": {
-    "nvol": 3200,
+    "nvol": 2300,
     "kvol": 600,
     "rvol": 17600,
     "svol": 1,
@@ -15848,7 +15848,7 @@
     "mvol": 2
   },
   "10_9824": {
-    "nvol": 1000,
+    "nvol": 1100,
     "kvol": 1600,
     "rvol": 0,
     "svol": 0,
@@ -15905,7 +15905,7 @@
   },
   "11_2809": {
     "nvol": 1700,
-    "kvol": 64800,
+    "kvol": 14800,
     "rvol": 0,
     "svol": 1,
     "gvol": 0,
@@ -16105,14 +16105,14 @@
   },
   "11_8095": {
     "nvol": 1600,
-    "kvol": 6200,
+    "kvol": 5200,
     "rvol": 0,
     "svol": 0,
     "gvol": 0,
     "mvol": 0
   },
   "11_8923": {
-    "nvol": 1600,
+    "nvol": 0,
     "kvol": 2000,
     "rvol": 0,
     "svol": 0,
@@ -16128,7 +16128,7 @@
     "mvol": 0
   },
   "11_9369": {
-    "nvol": 700,
+    "nvol": 600,
     "kvol": 0,
     "rvol": 0,
     "svol": 0,
@@ -16152,7 +16152,7 @@
     "mvol": 0
   },
   "11_2678": {
-    "nvol": 2000,
+    "nvol": 1000,
     "kvol": 5000,
     "rvol": 0,
     "svol": 0,
@@ -16161,7 +16161,7 @@
   },
   "11_7965": {
     "nvol": 1000,
-    "kvol": 20000,
+    "kvol": 5000,
     "rvol": 16100,
     "svol": 0,
     "gvol": 0,
