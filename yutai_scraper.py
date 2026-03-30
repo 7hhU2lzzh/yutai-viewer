@@ -4,6 +4,7 @@ import time
 import os
 import ftplib
 import json
+import random
 from io import BytesIO
 from datetime import datetime, timezone, timedelta
 
@@ -35,6 +36,9 @@ REFERER_MAP = {
 FIRMS      = ['nvol', 'kvol', 'rvol', 'svol', 'gvol', 'mvol']
 FIRM_NAMES = {'nvol':'日興', 'kvol':'カブコム', 'rvol':'楽天', 'svol':'SBI', 'gvol':'GMO', 'mvol':'松井'}
 
+# 在庫実数フィールド（推移蓄積用）
+ZAIKO_FIELDS = ['nkc', 'kbc', 'rtc', 'sbc', 'gmc', 'mtc', 'mxc']
+
 # hashi_api.php: 端データをサーバー保存するAPI（hashi_data.jsonは上書きしない）
 HASHI_API_PHP = '''<?php
 session_start();
@@ -55,7 +59,7 @@ if (!empty($_POST)) {
     $body = json_decode($raw, true) ?? [];
 }
 
-$key = preg_replace('/[^a-zA-Z0-9_\\-]/', '', $body['key'] ?? '');
+$key = preg_replace('/[^a-zA-Z0-9_\\\\-]/', '', $body['key'] ?? '');
 $val = $body['value'] ?? '';
 
 // キーが空、または値が長すぎる場合のみ拒否（自由入力対応のため許可リスト廃止）
@@ -158,7 +162,71 @@ def save_night_snapshot(snapshot: dict):
         json.dump(snapshot, f, ensure_ascii=False, indent=2)
 
 
+def parse_kenri_months(d_kenri: str) -> list:
+    """d_kenriから権利確定月のリストを抽出する
+    例: '3月31日' -> [3], '1月31日<br>7月31日' -> [1, 7]
+    """
+    months = []
+    if not d_kenri:
+        return months
+    for m in re.findall(r'(\d{1,2})月', d_kenri):
+        month = int(m)
+        if 1 <= month <= 12:
+            months.append(month)
+    return sorted(set(months))
+
+
+def save_zaiko_history(all_raw: list, now: datetime):
+    """在庫推移データを日付別ファイルに追記保存する
+    zaiko_history/YYYY-MM-DD.json に1スナップショットずつ追記
+    """
+    history_dir = "zaiko_history"
+    os.makedirs(history_dir, exist_ok=True)
+
+    date_str = now.strftime('%Y-%m-%d')
+    time_str = now.strftime('%H:%M')
+    filepath = os.path.join(history_dir, f"{date_str}.json")
+
+    # 既存データを読み込み
+    existing = []
+    if os.path.exists(filepath):
+        with open(filepath, "r", encoding="utf-8") as f:
+            try:
+                existing = json.load(f)
+            except json.JSONDecodeError:
+                existing = []
+
+    # スナップショットを作成
+    snapshot = {
+        "time": time_str,
+        "stocks": {}
+    }
+    for r in all_raw:
+        code = r.get("code", "")
+        month = r.get("_month", 0)
+        key = f"{month}_{code}"
+        entry = {}
+        for field in ZAIKO_FIELDS:
+            val = r.get(field)
+            if val is not None and str(val).lower() != "null":
+                entry[field] = val
+        if entry:  # 在庫データがある銘柄だけ記録
+            snapshot["stocks"][key] = entry
+
+    existing.append(snapshot)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(existing, f, ensure_ascii=False)
+
+    print(f"📈 zaiko_history/{date_str}.json 更新完了（{len(existing)}スナップショット, {len(snapshot['stocks'])}銘柄）")
+
+
 def main():
+    # --- ランダム遅延（偽装） ---
+    delay = random.randint(0, 900)  # 0〜15分
+    print(f"⏳ ランダム遅延: {delay}秒")
+    time.sleep(delay)
+
     now          = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
     update_time  = now.strftime('%Y-%m-%d %H:%M')
@@ -190,13 +258,14 @@ def main():
             name_cache = json.load(f)
         name_cache_updated = False
     else:
-        # 初回：空ファイルを作成しておく（git addで存在しないエラーを防ぐ）
         with open("name_cache.json", "w", encoding="utf-8") as f:
             json.dump({}, f)
-        name_cache_updated = True  # 初回作成もコミット対象に
+        name_cache_updated = True
 
-    # --- クロール ---
-    all_data = []
+    # --- クロール（全フィールド取得） ---
+    all_data = []    # ビューワー用（既存互換）
+    all_raw  = []    # 全フィールド保持
+    kenri_map = {}   # code -> 権利確定月リスト
     print("🚀 取得開始...")
     for month in range(1, 13):
         headers = {
@@ -228,10 +297,11 @@ def main():
                                     name_cache_updated = True
                                 else:
                                     print(f"    ❌ 取得失敗: {code} → 空のまま（キャッシュに記録）")
-                                    name_cache[code] = ""  # 次回以降Yahoo!を叩かない
+                                    name_cache[code] = ""
                                     name_cache_updated = True
                                 time.sleep(1)
 
+                        # 既存互換データ（ビューワーが使う）
                         all_data.append({
                             "month": month,
                             "code":  code,
@@ -246,8 +316,25 @@ def main():
                             "gvol":  int(r.get("gvol", 0) or 0),
                             "mvol":  int(r.get("mvol", 0) or 0),
                         })
+
+                        # 全フィールド保持（nameだけ補完済みで上書き）
+                        r["name"] = name
+                        r["_month"] = month
+                        all_raw.append(r)
+
+                        # 権利月マッピング
+                        d_kenri = clean(r.get("d_kenri"))
+                        if d_kenri and code:
+                            months = parse_kenri_months(d_kenri)
+                            if months:
+                                kenri_map[code] = {
+                                    "name": name,
+                                    "kenri_months": months,
+                                    "d_kenri": d_kenri,
+                                }
+
             print(f"  {month}月: OK")
-            time.sleep(1)
+            time.sleep(random.uniform(1.0, 2.5))  # リクエスト間隔もランダム化
         except Exception as e:
             print(f"  ⚠️ {month}月 エラー: {e}")
 
@@ -260,6 +347,24 @@ def main():
     if not all_data:
         print("データなし")
         return
+
+    # --- 在庫推移の蓄積 ---
+    save_zaiko_history(all_raw, now)
+
+    # --- 全フィールドデータ保存 ---
+    full_data = {
+        "update_time": update_time,
+        "total_records": len(all_raw),
+        "data": all_raw
+    }
+    with open("stock_full_data.json", "w", encoding="utf-8") as f:
+        json.dump(full_data, f, ensure_ascii=False)
+    print(f"💾 stock_full_data.json 保存完了（{len(all_raw)}件）")
+
+    # --- 権利月マッピング保存 ---
+    with open("kenri_map.json", "w", encoding="utf-8") as f:
+        json.dump(kenri_map, f, ensure_ascii=False, indent=2)
+    print(f"📅 kenri_map.json 保存完了（{len(kenri_map)}件）")
 
     # --- 夜23時スナップショット更新 ---
     if is_night:
@@ -332,7 +437,7 @@ def main():
         with open("users.json", "w", encoding="utf-8") as f:
             json.dump(initial_users, f, ensure_ascii=False, indent=2)
 
-    # --- stock_data.json を生成（night_snapshot_latest を埋め込む） ---
+    # --- stock_data.json を生成（既存互換 + night_snapshot_latest を埋め込む） ---
     for r in all_data:
         snap_key = f"{r['month']}_{r['code']}"
         if snap_key in night_snapshot:
@@ -374,8 +479,16 @@ def main():
         Require all denied
     </IfVersion>
 </Files>
-# stock_data.json / kokuzetsu_data.json / hashi_data.json はJSから読むため許可
+# stock_data.json / kokuzetsu_data.json / hashi_data.json / kenri_map.json はJSから読むため許可
 <Files "stock_data.json">
+    <IfVersion < 2.4>
+        Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all granted
+    </IfVersion>
+</Files>
+<Files "stock_full_data.json">
     <IfVersion < 2.4>
         Allow from all
     </IfVersion>
@@ -399,6 +512,14 @@ def main():
         Require all granted
     </IfVersion>
 </Files>
+<Files "kenri_map.json">
+    <IfVersion < 2.4>
+        Allow from all
+    </IfVersion>
+    <IfVersion >= 2.4>
+        Require all granted
+    </IfVersion>
+</Files>
 """
 
     # --- FTP転送 ---
@@ -411,8 +532,24 @@ def main():
             ftp.storbinary("STOR hashi_api.php", BytesIO(HASHI_API_PHP.encode('utf-8')))
 
             # データJSON
-            ftp.storbinary("STOR stock_data.json",     BytesIO(json.dumps(stock_data, ensure_ascii=False).encode('utf-8')))
-            ftp.storbinary("STOR kokuzetsu_data.json",  BytesIO(json.dumps(kokuzetsu, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR stock_data.json",      BytesIO(json.dumps(stock_data, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR stock_full_data.json",  BytesIO(json.dumps(full_data, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR kokuzetsu_data.json",   BytesIO(json.dumps(kokuzetsu, ensure_ascii=False).encode('utf-8')))
+            ftp.storbinary("STOR kenri_map.json",        BytesIO(json.dumps(kenri_map, ensure_ascii=False).encode('utf-8')))
+
+            # zaiko_history ディレクトリ作成（なければ）
+            try:
+                ftp.mkd("zaiko_history")
+            except Exception:
+                pass  # 既に存在する場合
+
+            # 当日の在庫推移ファイルを転送
+            date_str = now.strftime('%Y-%m-%d')
+            history_file = f"zaiko_history/{date_str}.json"
+            if os.path.exists(history_file):
+                with open(history_file, "rb") as hf:
+                    ftp.storbinary(f"STOR zaiko_history/{date_str}.json", hf)
+                print(f"  📈 {history_file} 転送完了")
 
             # users.json は既存なら上書きしない
             try:
