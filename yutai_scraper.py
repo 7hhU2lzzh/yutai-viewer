@@ -149,7 +149,7 @@ def is_night_snapshot_time(now: datetime) -> bool:
 
 
 def load_night_snapshot() -> dict:
-    """night_snapshot.json を読み込む（銘柄ごとの夜23時データ）"""
+    """night_snapshot.json を読み込む（最新スナップショット、既存互換）"""
     if os.path.exists("night_snapshot.json"):
         with open("night_snapshot.json", "r", encoding="utf-8") as f:
             return json.load(f)
@@ -157,9 +157,25 @@ def load_night_snapshot() -> dict:
 
 
 def save_night_snapshot(snapshot: dict):
-    """night_snapshot.json を保存"""
+    """night_snapshot.json を保存（最新スナップショット、既存互換）"""
     with open("night_snapshot.json", "w", encoding="utf-8") as f:
         json.dump(snapshot, f, ensure_ascii=False, indent=2)
+
+
+def load_night_history() -> dict:
+    """night_snapshot_history.json を読み込む（日次蓄積型）
+    構造: { "2026-04-04": { "4_2910": {"nvol":0,...}, ... }, ... }
+    """
+    if os.path.exists("night_snapshot_history.json"):
+        with open("night_snapshot_history.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+
+def save_night_history(history: dict):
+    """night_snapshot_history.json を保存"""
+    with open("night_snapshot_history.json", "w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False)
 
 
 def parse_kenri_months(d_kenri: str) -> list:
@@ -174,6 +190,67 @@ def parse_kenri_months(d_kenri: str) -> list:
         if 1 <= month <= 12:
             months.append(month)
     return sorted(set(months))
+
+
+# 数値系証券（在庫株数で判定）
+FIRMS_A = ['nvol', 'kvol', 'rvol']
+# ステータス系証券（◎▲×で判定）
+FIRMS_B = ['svol', 'gvol', 'mvol']
+
+
+def detect_exhaustion_from_history(night_history: dict, snap_key: str, firm: str) -> str:
+    """night_snapshot履歴から枯渇日を算出する
+
+    ルール:
+      数値系(nvol,kvol,rvol): 500株以上が2日連続 = 在庫あり
+      ステータス系(svol,gvol,mvol): ◎(=2)が2日連続 = 在庫あり
+    枯渇日 = 「在庫あり」が最後に成立した2日目の翌日
+
+    Returns: 枯渇日文字列 "YYYY/MM/DD" or None（枯渇していない or データ不足）
+    """
+    # 日付順にソート
+    dates = sorted(night_history.keys())
+    if len(dates) < 2:
+        return None
+
+    is_numeric = firm in FIRMS_A
+    threshold = 500 if is_numeric else 2  # 数値系は500株、ステータス系は◎(=2)
+
+    def has_stock(date_str):
+        day_data = night_history.get(date_str, {})
+        stock_data = day_data.get(snap_key, {})
+        val = stock_data.get(firm, 0)
+        if is_numeric:
+            return val >= threshold
+        else:
+            return val >= threshold  # ◎=2 のみ「在庫あり」、▲=1は「なし」扱い
+
+    # 最新日が在庫ありなら枯渇していない
+    # （2日連続チェック: 最新日と前日の両方が在庫あり）
+    if len(dates) >= 2 and has_stock(dates[-1]) and has_stock(dates[-2]):
+        return None
+
+    # 「2日連続で在庫あり」だった最後の日を探す（新しい方から遡る）
+    last_stable_date = None
+    for i in range(len(dates) - 1, 0, -1):
+        if has_stock(dates[i]) and has_stock(dates[i - 1]):
+            last_stable_date = dates[i]
+            break
+
+    if last_stable_date is None:
+        # 履歴内に2日連続で在庫ありの期間がない
+        # → データ開始時点で既に枯渇していた可能性
+        # → 最初に在庫がなくなった日を返す（フォールバック）
+        for d in dates:
+            if not has_stock(d):
+                return d.replace('-', '/')
+        return None
+
+    # 枯渇日 = 最後の安定日の翌日
+    idx = dates.index(last_stable_date)
+    if idx + 1 < len(dates):
+        return dates[idx + 1].replace('-', '/')
+    return None
 
 
 def save_zaiko_history(all_raw: list, now: datetime):
@@ -248,8 +325,11 @@ def main():
         with open("kokuzetsu.json", "r", encoding="utf-8") as f:
             kokuzetsu = json.load(f)
 
-    # --- night_snapshot.json を読む ---
+    # --- night_snapshot.json を読む（既存互換） ---
     night_snapshot = load_night_snapshot()
+
+    # --- night_snapshot_history.json を読む（蓄積型） ---
+    night_history = load_night_history()
 
     # --- name_cache.json を読む（一度取得した社名はキャッシュ済み） ---
     name_cache = {}
@@ -371,11 +451,11 @@ def main():
         print("🌙 夜23時スナップショット保存中...")
         snapshot_date = now.strftime('%Y-%m-%d')
         snapshot_time = now.strftime('%H:%M')
+
+        day_snapshot = {}
         for r in all_data:
             snap_key = f"{r['month']}_{r['code']}"
-            night_snapshot[snap_key] = {
-                "date": snapshot_date,
-                "time": snapshot_time,
+            snap_data = {
                 "nvol": r["nvol"],
                 "kvol": r["kvol"],
                 "rvol": r["rvol"],
@@ -383,33 +463,52 @@ def main():
                 "gvol": r["gvol"],
                 "mvol": r["mvol"],
             }
+            # 既存互換: night_snapshot.json (最新のみ上書き)
+            night_snapshot[snap_key] = {
+                "date": snapshot_date,
+                "time": snapshot_time,
+                **snap_data,
+            }
+            # 蓄積用
+            day_snapshot[snap_key] = snap_data
+
         save_night_snapshot(night_snapshot)
         print(f"🌙 night_snapshot.json 更新完了（{len(night_snapshot)}件）")
 
-    # --- 枯渇検出 ---
-    print("🔍 枯渇検出中...")
-    for r in all_data:
-        code  = r["code"]
-        month = r["month"]
-        key   = f"{current_year}_{month}_{code}"
-        prev  = prev_data.get(f"{month}_{code}", {})
+        # 蓄積型: night_snapshot_history.json に日付キーで追加
+        night_history[snapshot_date] = day_snapshot
+        save_night_history(night_history)
+        print(f"🌙 night_snapshot_history.json 蓄積完了（{len(night_history)}日分）")
 
-        if key not in kokuzetsu:
-            kokuzetsu[key] = {
-                "code":        code,
-                "name":        r["name"],
-                "kenri_year":  current_year,
-                "kenri_month": month,
-                "firms":       {}
-            }
+    # --- 枯渇検出（night_snapshot_history ベース） ---
+    print("🔍 枯渇検出中（履歴ベース判定）...")
 
-        for f in FIRMS:
-            prev_vol = prev.get(f, 0)
-            curr_vol = r[f]
-            if prev_vol > 0 and curr_vol == 0:
-                if f not in kokuzetsu[key]["firms"]:
-                    kokuzetsu[key]["firms"][f] = today_str
-                    print(f"  枯渇検出: {r['name']} {FIRM_NAMES[f]} {today_str}")
+    if len(night_history) < 2:
+        print("  ⚠️ night_snapshot_history が2日未満のため、枯渇判定をスキップ")
+    else:
+        for r in all_data:
+            code  = r["code"]
+            month = r["month"]
+            key   = f"{current_year}_{month}_{code}"
+            snap_key = f"{month}_{code}"
+
+            if key not in kokuzetsu:
+                kokuzetsu[key] = {
+                    "code":        code,
+                    "name":        r["name"],
+                    "kenri_year":  current_year,
+                    "kenri_month": month,
+                    "firms":       {}
+                }
+
+            # 全証券会社の枯渇日を履歴から毎回再計算
+            new_firms = {}
+            for f in FIRMS:
+                exhaust_date = detect_exhaustion_from_history(night_history, snap_key, f)
+                if exhaust_date:
+                    new_firms[f] = exhaust_date
+
+            kokuzetsu[key]["firms"] = new_firms
 
     # --- prev.json を更新 ---
     new_prev = {}
