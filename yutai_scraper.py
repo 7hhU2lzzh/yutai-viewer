@@ -299,20 +299,24 @@ def save_zaiko_history(all_raw: list, now: datetime):
 
 
 def main():
-    # --- ランダム遅延（偽装） ---
-    delay = random.randint(0, 900)  # 0〜15分
-    print(f"⏳ ランダム遅延: {delay}秒")
-    time.sleep(delay)
+    # --- 夜23時スナップショット判定（遅延前に判定） ---
+    pre_delay_now = datetime.now(JST)
+    is_night = (pre_delay_now.hour == 23) or (pre_delay_now.hour == 22 and pre_delay_now.minute >= 50)
+    if is_night:
+        print("🌙 夜23時スナップショットモード（遅延スキップ）")
+    else:
+        # --- ランダム遅延（偽装）--- 23時台以外のみ
+        delay = random.randint(0, 900)  # 0〜15分
+        print(f"⏳ ランダム遅延: {delay}秒")
+        time.sleep(delay)
 
     now          = datetime.now(JST)
     today_str    = now.strftime('%Y/%m/%d')
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
 
-    # --- 夜23時スナップショット判定 ---
-    is_night = is_night_snapshot_time(now)
     if is_night:
-        print("🌙 夜23時スナップショットモード")
+        print(f"🌙 判定時刻: {pre_delay_now.strftime('%H:%M')} → 実行時刻: {now.strftime('%H:%M')}")
 
     # --- prev.json と kokuzetsu.json を読む ---
     prev_data = {}
