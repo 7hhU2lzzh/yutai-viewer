@@ -483,6 +483,9 @@ def main():
         night_history[snapshot_date] = day_snapshot
         save_night_history(night_history)
         print(f"🌙 night_snapshot_history.json 蓄積完了（{len(night_history)}日分）")
+        # ✅ デバッグ: 実際に蓄積されている日付を全て表示
+        for date_key in sorted(night_history.keys()):
+            print(f"   📅 {date_key}: {len(night_history[date_key])}銘柄")
 
     # --- 枯渇検出（night_snapshot_history ベース） ---
     print("🔍 枯渇検出中（履歴ベース判定）...")
