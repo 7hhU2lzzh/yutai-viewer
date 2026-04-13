@@ -1,11 +1,24 @@
-name: Yutai Update (8h interval)
+name: Yutai Update (Hourly)
 on:
   schedule:
-    # JST 9:01, 17:01, 1:01 (翌日)
-    # = UTC 0:01, 8:01, 16:01
-    - cron: '1 0 * * *'
-    - cron: '1 8 * * *'
-    - cron: '1 16 * * *'
+    - cron: '3 23 * * *'    # JST 8:03
+    - cron: '17 0 * * *'    # JST 9:17
+    - cron: '8 1 * * *'     # JST 10:08
+    - cron: '22 2 * * *'    # JST 11:22
+    - cron: '11 3 * * *'    # JST 12:11
+    - cron: '35 4 * * *'    # JST 13:35
+    - cron: '6 5 * * *'     # JST 14:06
+    - cron: '28 6 * * *'    # JST 15:28
+    - cron: '14 7 * * *'    # JST 16:14
+    - cron: '41 8 * * *'    # JST 17:41
+    - cron: '9 9 * * *'     # JST 18:09
+    - cron: '33 10 * * *'   # JST 19:33
+    - cron: '19 11 * * *'   # JST 20:19
+    - cron: '46 12 * * *'   # JST 21:46
+    - cron: '5 13 * * *'    # JST 22:05
+    - cron: '1 14 * * *'    # JST 23:01
+    - cron: '27 15 * * *'   # JST 0:27
+    - cron: '38 16 * * *'   # JST 1:38
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,7 +35,6 @@ jobs:
         run: pip install requests
       - name: Restore persistent data
         run: |
-          # ✅ 修正: night_snapshot_history.json を restore リストに追加
           for f in prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json; do
             if [ -f "$f" ]; then
               echo "✅ $f exists"
@@ -31,7 +43,6 @@ jobs:
               echo "📝 $f created (empty)"
             fi
           done
-          # zaiko_history ディレクトリ確保
           mkdir -p zaiko_history
       - name: Run scraper
         env:
