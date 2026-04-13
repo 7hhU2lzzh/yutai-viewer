@@ -58,5 +58,7 @@ jobs:
           git add stock_data.json kokuzetsu_data.json
           git add stock_full_data.json kenri_map.json
           git add zaiko_history/
-          git diff --cached --quiet || git commit -m "auto: update stock data $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')"
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "auto: update stock data $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')"
+          git pull --rebase
           git push
