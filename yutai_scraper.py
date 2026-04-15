@@ -299,13 +299,17 @@ def save_zaiko_history(all_raw: list, now: datetime):
 
 
 def main():
-    # --- 夜23時スナップショット判定（遅延前に判定） ---
+    # --- 夜23時スナップショット判定 ---
+    # 優先1: ワークフローからの環境変数 NIGHT_MODE（cronスケジュールで確定）
+    # 優先2: 起動直後の時刻判定（フォールバック / workflow_dispatch用）
+    env_night = os.environ.get("NIGHT_MODE", "")
     pre_delay_now = datetime.now(JST)
-    is_night = (pre_delay_now.hour == 23) or (pre_delay_now.hour == 22 and pre_delay_now.minute >= 50)
+    is_night = bool(env_night) or (pre_delay_now.hour == 23) or (pre_delay_now.hour == 22 and pre_delay_now.minute >= 50)
+
     if is_night:
-        print("🌙 夜23時スナップショットモード（遅延スキップ）")
+        print(f"🌙 夜間スナップショットモード（NIGHT_MODE={env_night!r}, time={pre_delay_now.strftime('%H:%M')}）")
     else:
-        # --- ランダム遅延（偽装）--- 23時台以外のみ
+        # --- ランダム遅延（偽装）--- 夜間以外のみ
         delay = random.randint(0, 900)  # 0〜15分
         print(f"⏳ ランダム遅延: {delay}秒")
         time.sleep(delay)
@@ -315,8 +319,7 @@ def main():
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
 
-    if is_night:
-        print(f"🌙 判定時刻: {pre_delay_now.strftime('%H:%M')} → 実行時刻: {now.strftime('%H:%M')}")
+    print(f"📅 {now.strftime('%Y-%m-%d %H:%M:%S')} JST  is_night={is_night}")
 
     # --- prev.json と kokuzetsu.json を読む ---
     prev_data = {}
