@@ -1,55 +1,58 @@
-name: Yutai Update (Hourly)
+name: Yutai Update (2h interval)
+
 on:
   schedule:
-    - cron: '3 23 * * *'    # JST 8:03
-    - cron: '17 0 * * *'    # JST 9:17
-    - cron: '8 1 * * *'     # JST 10:08
-    - cron: '22 2 * * *'    # JST 11:22
-    - cron: '11 3 * * *'    # JST 12:11
-    - cron: '35 4 * * *'    # JST 13:35
-    - cron: '6 5 * * *'     # JST 14:06
-    - cron: '28 6 * * *'    # JST 15:28
-    - cron: '14 7 * * *'    # JST 16:14
-    - cron: '41 8 * * *'    # JST 17:41
-    - cron: '9 9 * * *'     # JST 18:09
-    - cron: '33 10 * * *'   # JST 19:33
-    - cron: '19 11 * * *'   # JST 20:19
-    - cron: '46 12 * * *'   # JST 21:46
-    - cron: '5 13 * * *'    # JST 22:05
-    - cron: '1 14 * * *'    # JST 23:01
-    - cron: '27 15 * * *'   # JST 0:27
-    - cron: '38 16 * * *'   # JST 1:38
+    # JST 7:01, 9:01, 11:01, 13:01, 15:01, 17:01, 19:01, 21:01, 23:01, 1:01
+    # = UTC 22:01, 0:01, 2:01, 4:01, 6:01, 8:01, 10:01, 12:01, 14:01, 16:01
+    - cron: '1 22 * * *'
+    - cron: '1 0 * * *'
+    - cron: '1 2 * * *'
+    - cron: '1 4 * * *'
+    - cron: '1 6 * * *'
+    - cron: '1 8 * * *'
+    - cron: '1 10 * * *'
+    - cron: '1 12 * * *'
+    - cron: '1 14 * * *'
+    - cron: '1 16 * * *'
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: pip install requests
+
       - name: Restore persistent data
         run: |
           for f in prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json; do
             if [ -f "$f" ]; then
-              echo "✅ $f exists"
+              echo "✅ $f exists ($(wc -c < "$f") bytes)"
             else
               echo "{}" > "$f"
               echo "📝 $f created (empty)"
             fi
           done
           mkdir -p zaiko_history
+
       - name: Run scraper
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USER: ${{ secrets.FTP_USER }}
           FTP_PASS: ${{ secrets.FTP_PASS }}
+          NIGHT_MODE: ${{ github.event.schedule == '1 14 * * *' && 'true' || '' }}
         run: python yutai_scraper.py
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
