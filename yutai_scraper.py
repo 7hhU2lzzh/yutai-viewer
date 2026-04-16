@@ -239,7 +239,12 @@ def detect_exhaustion_from_history(night_history: dict, snap_key: str, firm: str
 
     if last_stable_date is None:
         # 履歴内に2日連続で在庫ありの期間がない
-        # → データ開始時点で既に枯渇していた可能性
+        # 一度でも在庫があった形跡があるか確認
+        ever_had_stock = any(has_stock(d) for d in dates)
+        if not ever_had_stock:
+            # 全期間ゼロ → そもそも在庫が出ていない銘柄 → 枯渇ではない
+            return None
+        # 在庫が出たことはあるが2日連続には至らなかった
         # → 最初に在庫がなくなった日を返す（フォールバック）
         for d in dates:
             if not has_stock(d):
@@ -299,17 +304,13 @@ def save_zaiko_history(all_raw: list, now: datetime):
 
 
 def main():
-    # --- 夜23時スナップショット判定 ---
-    # 優先1: ワークフローからの環境変数 NIGHT_MODE（cronスケジュールで確定）
-    # 優先2: 起動直後の時刻判定（フォールバック / workflow_dispatch用）
-    env_night = os.environ.get("NIGHT_MODE", "")
+    # --- 夜23時スナップショット判定（遅延前に判定） ---
     pre_delay_now = datetime.now(JST)
-    is_night = bool(env_night) or (pre_delay_now.hour == 23) or (pre_delay_now.hour == 22 and pre_delay_now.minute >= 50)
-
+    is_night = (pre_delay_now.hour == 23) or (pre_delay_now.hour == 22 and pre_delay_now.minute >= 50)
     if is_night:
-        print(f"🌙 夜間スナップショットモード（NIGHT_MODE={env_night!r}, time={pre_delay_now.strftime('%H:%M')}）")
+        print("🌙 夜23時スナップショットモード（遅延スキップ）")
     else:
-        # --- ランダム遅延（偽装）--- 夜間以外のみ
+        # --- ランダム遅延（偽装）--- 23時台以外のみ
         delay = random.randint(0, 900)  # 0〜15分
         print(f"⏳ ランダム遅延: {delay}秒")
         time.sleep(delay)
@@ -319,7 +320,8 @@ def main():
     update_time  = now.strftime('%Y-%m-%d %H:%M')
     current_year = now.year
 
-    print(f"📅 {now.strftime('%Y-%m-%d %H:%M:%S')} JST  is_night={is_night}")
+    if is_night:
+        print(f"🌙 判定時刻: {pre_delay_now.strftime('%H:%M')} → 実行時刻: {now.strftime('%H:%M')}")
 
     # --- prev.json と kokuzetsu.json を読む ---
     prev_data = {}
@@ -533,6 +535,32 @@ def main():
         json.dump(kokuzetsu, f, ensure_ascii=False, indent=2)
 
     print("✅ kokuzetsu.json 更新完了")
+
+    # --- kokuzetsu_history.json に日付付きで蓄積 ---
+    # 構造: { "2026-04-05": { "2026_4_2910": {"firms": {"nvol":"2026/04/03",...}}, ... }, ... }
+    kokuzetsu_history = {}
+    if os.path.exists("kokuzetsu_history.json"):
+        with open("kokuzetsu_history.json", "r", encoding="utf-8") as f:
+            kokuzetsu_history = json.load(f)
+
+    today_key = now.strftime('%Y-%m-%d')
+    # 本日分のスナップショット: 枯渇日がある銘柄のみ記録（容量節約）
+    today_snapshot = {}
+    for key, val in kokuzetsu.items():
+        if val.get("firms"):
+            today_snapshot[key] = {
+                "code":  val["code"],
+                "name":  val["name"],
+                "firms": val["firms"]
+            }
+
+    if today_snapshot:
+        kokuzetsu_history[today_key] = today_snapshot
+        with open("kokuzetsu_history.json", "w", encoding="utf-8") as f:
+            json.dump(kokuzetsu_history, f, ensure_ascii=False)
+        print(f"📜 kokuzetsu_history.json 蓄積完了（{len(kokuzetsu_history)}日分, 本日{len(today_snapshot)}件）")
+    else:
+        print("📜 kokuzetsu_history.json: 本日の枯渇銘柄なし（スキップ）")
 
     # --- users.json が存在しなければ初期ファイルを作成 ---
     if not os.path.exists("users.json"):
