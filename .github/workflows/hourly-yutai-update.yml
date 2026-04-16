@@ -35,7 +35,7 @@ jobs:
 
       - name: Restore persistent data
         run: |
-          for f in prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json; do
+          for f in prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json kokuzetsu_history.json; do
             if [ -f "$f" ]; then
               echo "✅ $f exists ($(wc -c < "$f") bytes)"
             else
@@ -57,7 +57,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json
+          git add prev.json kokuzetsu.json name_cache.json night_snapshot.json night_snapshot_history.json kokuzetsu_history.json
           git add stock_data.json kokuzetsu_data.json
           git add stock_full_data.json kenri_map.json
           git add zaiko_history/
