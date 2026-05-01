@@ -4427,7 +4427,7 @@
     "nvol": 800,
     "kvol": 76400,
     "rvol": 0,
-    "svol": 1,
+    "svol": 2,
     "gvol": 0,
     "mvol": 2
   },
@@ -6907,7 +6907,7 @@
     "nvol": 0,
     "kvol": 243200,
     "rvol": 0,
-    "svol": 2,
+    "svol": 1,
     "gvol": 0,
     "mvol": 2
   },
