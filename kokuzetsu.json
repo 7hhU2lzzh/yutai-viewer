@@ -30162,5 +30162,19 @@
     "kenri_year": 2026,
     "kenri_month": 9,
     "firms": {}
+  },
+  "2026_6_4933": {
+    "code": "4933",
+    "name": "Ｉ－ｎｅ",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_8_369A": {
+    "code": "369A",
+    "name": "エータイ",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
   }
 }
