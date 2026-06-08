@@ -30176,5 +30176,19 @@
     "kenri_year": 2026,
     "kenri_month": 8,
     "firms": {}
+  },
+  "2026_3_3929": {
+    "code": "3929",
+    "name": "ソーシャルワイヤー",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_12_377A": {
+    "code": "377A",
+    "name": "エージェントＩＧ",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
