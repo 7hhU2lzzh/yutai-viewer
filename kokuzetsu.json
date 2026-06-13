@@ -30175,5 +30175,33 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_1_4014": {
+    "code": "4014",
+    "name": "カラダノート",
+    "kenri_year": 2026,
+    "kenri_month": 1,
+    "firms": {}
+  },
+  "2026_7_4014": {
+    "code": "4014",
+    "name": "カラダノート",
+    "kenri_year": 2026,
+    "kenri_month": 7,
+    "firms": {}
+  },
+  "2026_9_3477": {
+    "code": "3477",
+    "name": "フォーライフ",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_11_7083": {
+    "code": "7083",
+    "name": "ＡＨＣグループ",
+    "kenri_year": 2026,
+    "kenri_month": 11,
+    "firms": {}
   }
 }
