@@ -30203,5 +30203,47 @@
     "kenri_year": 2026,
     "kenri_month": 11,
     "firms": {}
+  },
+  "2026_3_343A": {
+    "code": "343A",
+    "name": "ＩＡＣＥトラベル",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_409A": {
+    "code": "409A",
+    "name": "オリオンビール",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_8370": {
+    "code": "8370",
+    "name": "紀陽銀行",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_10_6194": {
+    "code": "6194",
+    "name": "アトラエ",
+    "kenri_year": 2026,
+    "kenri_month": 10,
+    "firms": {}
+  },
+  "2026_12_246A": {
+    "code": "246A",
+    "name": "アスア",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
+  },
+  "2026_12_2986": {
+    "code": "2986",
+    "name": "ＬＡホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
