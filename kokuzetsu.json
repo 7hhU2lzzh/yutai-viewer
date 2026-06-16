@@ -30311,5 +30311,19 @@
     "kenri_year": 2026,
     "kenri_month": 9,
     "firms": {}
+  },
+  "2026_5_8887": {
+    "code": "8887",
+    "name": "シーラホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 5,
+    "firms": {}
+  },
+  "2026_10_4666": {
+    "code": "4666",
+    "name": "パーク２４",
+    "kenri_year": 2026,
+    "kenri_month": 10,
+    "firms": {}
   }
 }
