@@ -30373,5 +30373,40 @@
     "kenri_year": 2026,
     "kenri_month": 9,
     "firms": {}
+  },
+  "2026_3_3504": {
+    "code": "3504",
+    "name": "丸八ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_4290": {
+    "code": "4290",
+    "name": "プレステージ・インターナショナル",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_6_4415": {
+    "code": "4415",
+    "name": "ブロードエンタープライズ",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_8_8508": {
+    "code": "8508",
+    "name": "Ｊトラスト",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
+  },
+  "2026_8_9010": {
+    "code": "9010",
+    "name": "富士急行",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
   }
 }
