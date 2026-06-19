@@ -30428,5 +30428,19 @@
     "kenri_year": 2026,
     "kenri_month": 8,
     "firms": {}
+  },
+  "2026_6_9755": {
+    "code": "9755",
+    "name": "応用地質",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_11_189A": {
+    "code": "189A",
+    "name": "Ｄ＆Ｍカンパニー",
+    "kenri_year": 2026,
+    "kenri_month": 11,
+    "firms": {}
   }
 }
