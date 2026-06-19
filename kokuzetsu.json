@@ -30449,5 +30449,47 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_5_6905": {
+    "code": "6905",
+    "name": "コーセル",
+    "kenri_year": 2026,
+    "kenri_month": 5,
+    "firms": {}
+  },
+  "2026_6_3984": {
+    "code": "3984",
+    "name": "ユーザーローカル",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_8_7504": {
+    "code": "7504",
+    "name": "高速",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
+  },
+  "2026_9_3143": {
+    "code": "3143",
+    "name": "オーウイル",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_5607": {
+    "code": "5607",
+    "name": "中央可鍛工業",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_8818": {
+    "code": "8818",
+    "name": "京阪神ビルディング",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
   }
 }
