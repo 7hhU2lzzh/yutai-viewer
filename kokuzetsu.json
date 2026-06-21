@@ -30491,5 +30491,19 @@
     "kenri_year": 2026,
     "kenri_month": 9,
     "firms": {}
+  },
+  "2026_3_8393": {
+    "code": "8393",
+    "name": "宮崎銀行",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_12_4293": {
+    "code": "4293",
+    "name": "セプテーニ・ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
