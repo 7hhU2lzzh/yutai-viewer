@@ -30519,5 +30519,12 @@
     "kenri_year": 2026,
     "kenri_month": 11,
     "firms": {}
+  },
+  "2026_5_205A": {
+    "code": "205A",
+    "name": "ロゴスホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 5,
+    "firms": {}
   }
 }
