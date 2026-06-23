@@ -30561,5 +30561,12 @@
     "kenri_year": 2026,
     "kenri_month": 5,
     "firms": {}
+  },
+  "2026_8_2999": {
+    "code": "2999",
+    "name": "ホームポジション",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
   }
 }
