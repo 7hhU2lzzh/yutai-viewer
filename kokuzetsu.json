@@ -31362,5 +31362,19 @@
     "kenri_year": 2026,
     "kenri_month": 11,
     "firms": {}
+  },
+  "2026_2_4432": {
+    "code": "4432",
+    "name": "ウイングアーク１ｓｔ",
+    "kenri_year": 2026,
+    "kenri_month": 2,
+    "firms": {}
+  },
+  "2026_3_575A": {
+    "code": "575A",
+    "name": "前澤ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
   }
 }
