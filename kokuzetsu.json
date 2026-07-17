@@ -31411,5 +31411,19 @@
     "kenri_year": 2026,
     "kenri_month": 8,
     "firms": {}
+  },
+  "2026_2_542A": {
+    "code": "542A",
+    "name": "ビタブリッドジャパン",
+    "kenri_year": 2026,
+    "kenri_month": 2,
+    "firms": {}
+  },
+  "2026_3_3946": {
+    "code": "3946",
+    "name": "トーモク",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
   }
 }
