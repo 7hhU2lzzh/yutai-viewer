@@ -31519,5 +31519,47 @@
     "kenri_year": 2026,
     "kenri_month": 3,
     "firms": {}
+  },
+  "2026_3_6993": {
+    "code": "6993",
+    "name": "大黒屋ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_9_4997": {
+    "code": "4997",
+    "name": "日本農薬",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_9090": {
+    "code": "9090",
+    "name": "ＡＺ－ＣＯＭ丸和ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_9274": {
+    "code": "9274",
+    "name": "ＫＰＰグループホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_12_1663": {
+    "code": "1663",
+    "name": "Ｋ＆Ｏエナジーグループ",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
+  },
+  "2026_12_3667": {
+    "code": "3667",
+    "name": "ｅｎｉｓｈ",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
