@@ -31214,5 +31214,19 @@
     "kenri_year": 2026,
     "kenri_month": 3,
     "firms": {}
+  },
+  "2026_9_7241": {
+    "code": "7241",
+    "name": "フタバ産業",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_12_7976": {
+    "code": "7976",
+    "name": "三菱鉛筆",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
