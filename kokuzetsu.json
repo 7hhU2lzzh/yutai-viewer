@@ -31228,5 +31228,47 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_3_9991": {
+    "code": "9991",
+    "name": "ジェコス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_8_6522": {
+    "code": "6522",
+    "name": "アスタリスク",
+    "kenri_year": 2026,
+    "kenri_month": 8,
+    "firms": {}
+  },
+  "2026_9_300A": {
+    "code": "300A",
+    "name": "ＭＩＣ",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_4290": {
+    "code": "4290",
+    "name": "プレステージ・インターナショナル",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_8045": {
+    "code": "8045",
+    "name": "横浜丸魚",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_12_4452": {
+    "code": "4452",
+    "name": "花王",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
