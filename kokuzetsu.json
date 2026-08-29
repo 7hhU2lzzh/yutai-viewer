@@ -31806,5 +31806,26 @@
     "kenri_year": 2026,
     "kenri_month": 11,
     "firms": {}
+  },
+  "2026_6_3958": {
+    "code": "3958",
+    "name": "笹徳印刷",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_9_9658": {
+    "code": "9658",
+    "name": "ビジネスブレイン太田昭和",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_10_4707": {
+    "code": "4707",
+    "name": "キタック",
+    "kenri_year": 2026,
+    "kenri_month": 10,
+    "firms": {}
   }
 }
