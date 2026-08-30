@@ -31827,5 +31827,33 @@
     "kenri_year": 2026,
     "kenri_month": 10,
     "firms": {}
+  },
+  "2026_3_2264": {
+    "code": "2264",
+    "name": "森永乳業",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_7282": {
+    "code": "7282",
+    "name": "豊田合成",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_8766": {
+    "code": "8766",
+    "name": "東京海上ホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_12_5302": {
+    "code": "5302",
+    "name": "日本カーボン",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
