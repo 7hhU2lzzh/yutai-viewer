@@ -31851,5 +31851,19 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_2_3083": {
+    "code": "3083",
+    "name": "スターシーズ",
+    "kenri_year": 2026,
+    "kenri_month": 2,
+    "firms": {}
+  },
+  "2026_3_8518": {
+    "code": "8518",
+    "name": "日本アジア投資",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
   }
 }
