@@ -32476,5 +32476,19 @@
     "kenri_year": 2026,
     "kenri_month": 3,
     "firms": {}
+  },
+  "2026_1_456A": {
+    "code": "456A",
+    "name": "ＨＵＭＡＮ　ＭＡＤＥ",
+    "kenri_year": 2026,
+    "kenri_month": 1,
+    "firms": {}
+  },
+  "2026_12_5868": {
+    "code": "5868",
+    "name": "ロココ",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
