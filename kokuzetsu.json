@@ -34073,5 +34073,19 @@
     "kenri_year": 2026,
     "kenri_month": 3,
     "firms": {}
+  },
+  "2026_1_3657": {
+    "code": "3657",
+    "name": "ポールトゥウィンホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 1,
+    "firms": {}
+  },
+  "2026_11_4992": {
+    "code": "4992",
+    "name": "北興化学工業",
+    "kenri_year": 2026,
+    "kenri_month": 11,
+    "firms": {}
   }
 }
