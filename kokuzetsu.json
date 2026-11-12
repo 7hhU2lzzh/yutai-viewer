@@ -34149,5 +34149,33 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_3_1885": {
+    "code": "1885",
+    "name": "東亜建設工業",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_9896": {
+    "code": "9896",
+    "name": "ＪＫホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_9_1885": {
+    "code": "1885",
+    "name": "東亜建設工業",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_9_2982": {
+    "code": "2982",
+    "name": "ＡＤワークスグループ",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
   }
 }
