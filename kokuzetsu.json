@@ -34178,5 +34178,19 @@
     "kenri_year": 2026,
     "kenri_month": 9,
     "firms": {}
+  },
+  "2026_9_220A": {
+    "code": "220A",
+    "name": "Ｆａｂｅｒ　Ｃｏｍｐａｎｙ",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
+  },
+  "2026_12_8946": {
+    "code": "8946",
+    "name": "ＡＳＩＡＮ　ＳＴＡＲ",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
