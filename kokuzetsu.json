@@ -34192,5 +34192,26 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_3_220A": {
+    "code": "220A",
+    "name": "Ｆａｂｅｒ　Ｃｏｍｐａｎｙ",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_5133": {
+    "code": "5133",
+    "name": "テリロジーホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_3_6538": {
+    "code": "6538",
+    "name": "ディスラプターズ",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
   }
 }
