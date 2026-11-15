@@ -34213,5 +34213,19 @@
     "kenri_year": 2026,
     "kenri_month": 3,
     "firms": {}
+  },
+  "2026_3_8115": {
+    "code": "8115",
+    "name": "ムーンバット",
+    "kenri_year": 2026,
+    "kenri_month": 3,
+    "firms": {}
+  },
+  "2026_9_8115": {
+    "code": "8115",
+    "name": "ムーンバット",
+    "kenri_year": 2026,
+    "kenri_month": 9,
+    "firms": {}
   }
 }
