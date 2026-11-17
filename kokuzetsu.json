@@ -34259,5 +34259,26 @@
     "kenri_year": 2026,
     "kenri_month": 12,
     "firms": {}
+  },
+  "2026_6_3625": {
+    "code": "3625",
+    "name": "テックファームホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 6,
+    "firms": {}
+  },
+  "2026_12_281A": {
+    "code": "281A",
+    "name": "インフォメティス",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
+  },
+  "2026_12_3625": {
+    "code": "3625",
+    "name": "テックファームホールディングス",
+    "kenri_year": 2026,
+    "kenri_month": 12,
+    "firms": {}
   }
 }
